@@ -41,7 +41,6 @@ void predsptree(tst_rbtnode* root, tst_rbtnode* sentinel)
 	predsptree(root->rchild, sentinel);
 }
 
-//遍历-栈
 void predsptree_s_1(tst_rbtnode* root, tst_rbtnode* sentinel)
 {
 	TstStack<tst_rbtnode*> s;
@@ -225,7 +224,7 @@ bool judgesym(tst_rbtnode* root, tst_rbtnode* sentinel)
 {
 	return _judgesym(root->lchild, root->rchild, sentinel);
 }
-//镜像
+
 void mirror(tst_rbtnode* root, tst_rbtnode* sentinel)
 {
 	tst_rbtnode* p;
@@ -289,7 +288,8 @@ tst_rbtnode* changetolink(tst_rbtnode* root, tst_rbtnode* sentinel)
 	return sentinel;
 }
 
-void dsptree(tst_rbtnode* root, tst_rbtnode* sentinel)
+
+void dsprbttree(tst_rbtnode* root, tst_rbtnode* sentinel)
 {
 	TstQueue<tst_rbtnode*> q1;
 	TstQueue<tst_rbtnode*> q2;
@@ -305,7 +305,7 @@ void dsptree(tst_rbtnode* root, tst_rbtnode* sentinel)
 		printf("  ");
 	}
 
-	printf("%2d%s\n", root->key, root->color ? "红" : "黑");
+	printf("%2d%s\n", root->key, root->color ? "R" : "B");
 
 	while (c)
 	{
@@ -328,7 +328,7 @@ void dsptree(tst_rbtnode* root, tst_rbtnode* sentinel)
 			if (p != sentinel)
 			{
 				c++;
-				printf("%2d%s", p->key, p->color ? "红" : "黑");
+				printf("%2d%s", p->key, p->color ? "R" : "B");
 			}
 			else
 			{
@@ -356,6 +356,73 @@ void dsptree(tst_rbtnode* root, tst_rbtnode* sentinel)
 
 }
 
+
+void dspavltree(tst_rbtnode* root, tst_rbtnode* sentinel)
+{
+	TstQueue<tst_rbtnode*> q1;
+	TstQueue<tst_rbtnode*> q2;
+	tst_rbtnode* p;
+	q1.push(root);
+
+	int c = 1;
+	int n = treehigh(root, sentinel);
+	int m = (int)pow(2, n - 1);
+
+	for (int i = 0; i < m; i++)
+	{
+		printf("  ");
+	}
+
+	printf("%2d%1d\n", root->key, root->height);
+
+	while (c)
+	{
+		c = 0;
+		n--;
+		for (int i = 0; i < m / 2; i++)
+		{
+			printf("  ");
+		}
+		while (!q1.empty())
+		{
+			p = q1.front();
+			sentinel == p ? q2.push(sentinel) : q2.push(p->lchild);
+			sentinel == p ? q2.push(sentinel) : q2.push(p->rchild);
+			q1.pop();
+		}
+		while (true)
+		{
+			p = q2.front();
+			if (p != sentinel)
+			{
+				c++;
+				printf("%2d%1d", p->key, p->height);
+			}
+			else
+			{
+				printf("    ");
+			}
+
+			q1.push(p);
+			q2.pop();
+
+			if (!q2.empty())
+			{
+				for (int i = 0; i < m - 2; i++)
+				{
+					printf("  ");
+				}
+			}
+			else
+			{
+				m /= 2;
+				break;
+			}
+		}
+		printf("\n");
+	}
+
+}
 
 void destoytree(tst_rbtnode* root, tst_rbtnode* sentinel)
 {

@@ -199,9 +199,9 @@ public:
 private:
 	int lenth;
 
-	TstListNode<T>* head; //链表的头结点。
+	TstListNode<T>* head; /* 链表的头结点。 */
 
-	TstListNode<T>* GetNode() //用来获得一个节点。
+	TstListNode<T>* GetNode() /* 用来获得一个节点。 */
 	{
 		return  new TstListNode<T>();
 	}

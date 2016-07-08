@@ -18,9 +18,10 @@ typedef struct tst_rbtnode_t tst_rbtnode;
 struct tst_rbtnode_t
 {
 	unsigned int	key;
+	tst_rbtnode*	parent;
 	tst_rbtnode*	lchild;
 	tst_rbtnode*	rchild;
-	tst_rbtnode*	parent;
+	int				height;
 	unsigned char	color;
 	unsigned char	data;
 };
@@ -73,6 +74,7 @@ do											\
 {											\
 	memset(node, 0x00, sizeof(tst_rbtnode));\
 	(node)->key = nkey;						\
+	(node)->height = 1;						\
 } while (0)
 
 #define tst_rbt_node_reset(node) tst_rbt_node_init(node, 0)

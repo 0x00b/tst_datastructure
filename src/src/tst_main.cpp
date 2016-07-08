@@ -7,15 +7,142 @@
 #include "tst_queue.hpp"
 #include "tst_list.hpp"
 #include "tst_stack.hpp"
-#include "tst_rbtree.h"
 
+extern "C"{
+#include "tst_rbtree.h"
+#include "tst_avltree.h"
+
+}
 using namespace std;
 
-#define len 11
+#define len 12
+
+void tst_avl_main();
+void tst_rbt_main();
 
 int main(int argc, char* args[])
 {
-//	queue<tst_rbtnode*> q;
+#if 1
+	tst_avl_main();
+#else
+	tst_rbt_main();
+#endif
+
+#if defined(_WIN32) || defined(_WIN64)
+	return system("pause");
+#else
+	return 0;
+#endif
+}
+
+void tst_avl_main()
+{
+	tst_avlnode* root = NULL;
+
+	//tst_avl_node_init(root, 0);
+
+	tst_avlnode* node[len];
+
+
+	for (int i = 0; i < len; i++)
+	{
+		node[i] = (tst_avlnode*)malloc(sizeof(tst_avlnode));
+		tst_avl_node_init(node[i], i );
+		root = tst_avl_insert(&root, node[i]); dspavltree(root); printf("\n");
+	}
+#if 0
+	// test tst_avl_rotate_left
+	root = node[2];
+	root->height = 4;
+
+	root->lchild = node[1];
+	node[1]->parent = root;
+	root->lchild->height = 1;
+
+	root->rchild = node[4];
+	node[4]->parent = root;
+	root->rchild->height = 3;
+
+	root->rchild->lchild = node[3];
+	node[3]->parent = root->rchild;
+	root->rchild->lchild->height = 1;
+
+	root->rchild->rchild = node[5];
+	node[5]->parent = root->rchild;
+	root->rchild->rchild->height = 2;
+
+	root->rchild->rchild->rchild = node[6];
+	node[6]->parent = root->rchild->rchild;
+	root->rchild->rchild->rchild->height = 1;
+
+	dspavltree(root); printf("\n");
+	tst_avl_rotate_left(&root);
+	dspavltree(root); printf("\n");
+
+	// test tst_avl_rotate_left
+
+	tst_avl_rotate_right(&root);
+	dspavltree(root); printf("\n");
+
+#endif
+
+#if 0
+	// test tst_avl_delete
+	root = node[2];
+	root->height = 4;
+
+	root->lchild = node[1];
+	node[1]->parent = root;
+	root->lchild->height = 1;
+
+	root->rchild = node[4];
+	node[4]->parent = root;
+	root->rchild->height = 3;
+
+	root->rchild->lchild = node[3];
+	node[3]->parent = root->rchild;
+	root->rchild->lchild->height = 1;
+
+	root->rchild->rchild = node[5];
+	node[5]->parent = root->rchild;
+	root->rchild->rchild->height = 2;
+
+	root->rchild->rchild->rchild = node[6];
+	node[6]->parent = root->rchild->rchild;
+	root->rchild->rchild->rchild->height = 1;
+
+	dspavltree(root); printf("\n");
+
+#elf 0
+	printf("delete:3 5 2 6\n");
+	tst_avl_delete(&root, node[3]);
+
+	dspavltree(root); printf("\n");
+	tst_avl_delete(&root, node[5]);
+	dspavltree(root); printf("\n");
+	tst_avl_delete(&root, node[2]);
+	dspavltree(root); printf("\n");
+	tst_avl_delete(&root, node[6]);
+	dspavltree(root); printf("\n");
+	tst_avl_delete(&root, node[9]);
+	dspavltree(root); printf("\n");
+#else 
+
+	printf("delete:\n");
+	for (int i = len-1; i >0 ; i--)
+	{
+		tst_avl_delete_beta(&root, node[i]);
+		dspavltree(root); printf("\n");
+	}
+#endif
+
+
+	destoytree(root, NULL);
+
+}
+void tst_rbt_main()
+{
+/*	queue<tst_rbtnode*> q; */
 
 #if 1
 	tst_rbtree t;
@@ -29,47 +156,48 @@ int main(int argc, char* args[])
 	for (int i = 0; i < len; i++)
 	{
 		node[i] = (tst_rbtnode*)malloc(sizeof(tst_rbtnode));
-		tst_rbt_node_init(node[i], i+1);
+		tst_rbt_node_init(node[i], i);
 		tst_rbt_insert(&t, node[i]);
-//		dsptree(t.root, t.sentinel); printf("\n");
+		dsprbttree(t.root, t.sentinel); printf("\n"); 
 	}
-	//显示树
+	/* 显示树 */
+	
 	printf("tree node count:%d  tree height:%d\n",\
 		treenodecount(t.root, t.sentinel), treehigh(t.root,t.sentinel));
 	printf("tree:\n");
-	dsptree(t.root, t.sentinel); printf("\n");
+	dsprbttree(t.root, t.sentinel); printf("\n");
 
 #if 1
-	printf("前序dg:");
+	printf("predg:");
 	predsptree(t.root, t.sentinel); 
 	printf("\n");
-	printf("前序s1:");
+	printf("pres1:");
 	predsptree_s_1(t.root, t.sentinel);
 	printf("\n");
-	printf("前序s2:");
+	printf("pres2:");
 	predsptree_s_2(t.root, t.sentinel);
 	printf("\n\n");
 
-	printf("中序dg:");
+	printf("middg:");
 	middsptree(t.root, t.sentinel);
 	printf("\n");
-	printf("中序s1:");
+	printf("mids1:");
 	middsptree_s_1(t.root, t.sentinel);
 	printf("\n");
-	printf("逆中序:");
+	printf("rmid:");
 	middsptree_s_s(t.root, t.sentinel);
 	printf("\n\n");
 
-	printf("后序dg:"); 
+	printf("aftdg:"); 
 	aftdsptree(t.root, t.sentinel); 
 	printf("\n");
-	printf("后序s1:");
+	printf("afts1:");
 	aftdsptree_s_1(t.root, t.sentinel);
 	printf("\n");
 
 #endif
 	tst_rbtnode* p;
-	//删除节点
+	/* 删除节点 */
 #if 1
 	p = tst_rbt_find(&t, t.sentinel, 8);
 	printf("\n del find = %d:\n", p ? p->key : -1);
@@ -79,14 +207,14 @@ int main(int argc, char* args[])
 */
 	tst_rbt_delete(&t, p);
 	free(p);
-	dsptree(t.root, t.sentinel); printf("\n");
+	dsprbttree(t.root, t.sentinel); printf("\n");
 	printf("\n");
 #endif
 
 #if 1
 	printf("mirror:\n");
 	mirror(t.root, t.sentinel);
-	dsptree(t.root, t.sentinel); printf("\n");
+	dsprbttree(t.root, t.sentinel); printf("\n");
 #endif
 
 #if 1
@@ -108,7 +236,7 @@ int main(int argc, char* args[])
 		p = p->parent;
 	}
 
-	//释放
+	/* 释放 */
 	tst_rbtnode* pt;
 	p = ph->lchild;
 	while (p != ph)
@@ -148,11 +276,11 @@ int main(int argc, char* args[])
 	n[6].rchild = &sen;
 
 	judgesym(&n[0], &sen) ? printf("\n对称\n") : printf("\n不对称\n");
-	dsptree(&n[0], &sen);
+	dsprbttree(&n[0], &sen);
 
 	n[5].key = 4;
 	judgesym(&n[0], &sen) ? printf("\n对称\n") : printf("\n不对称\n");
-	dsptree(&n[0], &sen);
+	dsprbttree(&n[0], &sen);
 #endif 
 
 #else //rbtree
@@ -186,6 +314,5 @@ int main(int argc, char* args[])
 
 	TstDestroy(it ,it);
 #endif
-	return 0;
 }
 
