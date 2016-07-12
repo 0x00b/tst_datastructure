@@ -113,7 +113,7 @@ void tst_avl_main()
 
 	dspavltree(root); printf("\n");
 
-#elf 0
+#elif 1
 	printf("delete:3 5 2 6\n");
 	tst_avl_delete(&root, node[3]);
 
@@ -131,11 +131,12 @@ void tst_avl_main()
 	printf("delete:\n");
 	for (int i = len-1; i >0 ; i--)
 	{
-		tst_avl_delete_beta(&root, node[i]);
+		//tst_avl_delete_beta(&root, node[i]);
+		printf("del[%d]\n",i);
+		tst_avl_delete(&root, node[i]);
 		dspavltree(root); printf("\n");
 	}
 #endif
-
 
 	destoytree(root, NULL);
 

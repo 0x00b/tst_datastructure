@@ -152,7 +152,7 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 		temp = tst_rbt_min_node(node->rchild, sentinel);
 		if (temp->lchild == sentinel)
 		{	
-			/* 既然是最小的节点，其实并不会进入这个分支，如果还有左孩子，肯定不是最小的 */
+			/* 既然是最小的节点，一定进入这个分支，如果还有左孩子，temp肯定不是最小的 */
 			subt = temp->rchild;
 		}
 		else

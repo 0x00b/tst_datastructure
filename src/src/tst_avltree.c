@@ -302,7 +302,7 @@ void tst_avl_delete_beta(tst_avlnode** root, tst_avlnode* node)
 	}
 
 	//dspavltree(*root,NULL);
-	/* rebalance */
+	/* rebalance ,还有bug，不想写了*/
 	while (p && (2 == tst_avl_factor(p)))
 	{
 		pNd = p->parent; 
@@ -354,74 +354,153 @@ void tst_avl_delete_beta(tst_avlnode** root, tst_avlnode* node)
 
 
 /***********************************************
-* delete
+* delete  
 **********************************************/
 void tst_avl_delete(tst_avlnode** root, tst_avlnode* node)
 {
 	tst_avlnode* p = NULL;
+	tst_avlnode* q = NULL;
 	tst_avlnode* pNd = NULL;
 	int factor = 0;
 
 	assert(root && *root && node);
 
 	/* 先找到替换的节点 */
-	if (NULL == node->lchild)
-	{
+	if (NULL == node->lchild) 
+	{	/* 查找情况1 */
 		pNd = node->rchild;
+		p = node;
 	}
 	else if (NULL == node->rchild)
-	{
+	{	/* 查找情况2 */
 		pNd = node->lchild;
+		p = node;
 	}
 	else
-	{
+	{	/* 查找情况3 ,从比较高的一边去找一个节点来替换要删除的点，这样不需要调整的可能性比较大*/
 		if (tst_avl_height(node->lchild) < tst_avl_height(node->rchild))
 		{
-			pNd = tst_avl_min_node(node->rchild);
+			p = tst_avl_min_node(node->rchild);
 		}
 		else
 		{
-			pNd = tst_avl_max_node(node->lchild);
+			p = tst_avl_max_node(node->lchild);
 		}
-	}
-
-	/* 替换 node，node移出树外 */
-	p = node->parent;
-	tst_avl_set_pa(pNd, p);
-	if (NULL != p)
-	{
-		if (tst_rbt_is_lchild(node))
+		if ( NULL == p->lchild)
 		{
-			p->lchild = pNd;
+			pNd = p->rchild;
 		}
 		else
 		{
-			p->rchild = pNd;
+			pNd = p->lchild;
 		}
 	}
-	else
-	{
+	if (p == *root)
+	{	/* 只会是查找情况1,2，因为情况3已经是从左右孩子中去找p，p不可能是*root */
 		*root = pNd;
+		pNd->parent = NULL;
+		tst_rbt_node_reset(node);
+		return;
 	}
-	if (node->lchild == pNd)
+
+	/* 经过p == *root判断后， node/p->parent 不会是NULL了。
+	 * 替换 node，node移出树外 */
+
+	/* 找到的节点（p）拿到树外 */
+
+	q = tst_rbt_parent(p);
+
+	if (tst_rbt_is_lchild(p))
 	{
-		pNd->rchild = node->rchild;
-		tst_avl_set_pa(pNd->rchild, pNd);
-	}
-	else if (node->rchild == pNd)
-	{
-		pNd->lchild = node->lchild;
-		tst_avl_set_pa(pNd->lchild, pNd);
+		tst_rbt_parent(p)->lchild = pNd;
 	}
 	else
 	{
-		pNd->lchild = node->lchild;
-		tst_avl_set_pa(pNd->lchild, pNd);
-		pNd->rchild = node->rchild;
-		tst_avl_set_pa(pNd->rchild, pNd);
+		tst_rbt_parent(p)->rchild = pNd;
 	}
 
-	/* */
+	if (p == node)
+	{
+		tst_avl_set_pa(pNd, tst_rbt_parent(p));
+	}
+	else
+	{
+		if (tst_rbt_parent(p) == node)
+		{
+			tst_avl_set_pa(pNd, tst_rbt_grandpa(p));
+			q = tst_rbt_grandpa(p);
+		}
+		else
+		{
+			tst_avl_set_pa(pNd, tst_rbt_parent(p));
+		}
+		/* p拿到树外之后，替换需要删除的node */
+		tst_avl_set_pa(p, tst_rbt_parent(node));
+		p->lchild = node->lchild;
+		tst_avl_set_pa(p->lchild, p);
+		p->rchild = node->rchild;
+		tst_avl_set_pa(p->rchild, p);
+		//p->height = node->height;
+		p->height = tst_avl_max(tst_avl_height(p->lchild), tst_avl_height(p->rchild)) + 1;
+
+		if (node == *root)
+		{	/* 如果要删除的是根节点，p替换根节点，否则如下 */
+			*root = p;
+		}
+		else
+		{
+			if (tst_rbt_is_lchild(node))
+			{
+				tst_rbt_parent(node)->lchild = p;
+			}
+			else
+			{
+				tst_rbt_parent(node)->rchild = p;
+			}
+		}
+
+	}
+
+	//q->height = tst_avl_max(tst_avl_height(q->lchild), tst_avl_height(q->rchild)) + 1;
+
+	//dspavltree(*root, NULL);
+	/* rebalance */
+
+	while (q)
+	{
+		q->height = tst_avl_max(tst_avl_height(q->lchild), tst_avl_height(q->rchild)) + 1;
+		pNd = q;
+		if (2 == tst_avl_factor(q))
+		{
+			if (tst_avl_height(q->lchild) < tst_avl_height(q->rchild))
+			{
+				if (pNd == *root)
+				{
+					*root = tst_avl_rotate_left(&q);
+				}
+				else
+				{
+					tst_rbt_is_lchild(q)
+						? (tst_rbt_parent(q)->lchild = tst_avl_rotate_left(&q)) 
+						: (tst_rbt_parent(q)->rchild = tst_avl_rotate_left(&q));
+				}
+			}
+			else
+			{
+				if (pNd == *root)
+				{
+					*root = tst_avl_rotate_right(&q);
+				}
+				else
+				{
+					tst_rbt_is_lchild(q)
+						? (tst_rbt_parent(q)->lchild = tst_avl_rotate_right(&q))
+						: (tst_rbt_parent(q)->rchild = tst_avl_rotate_right(&q));
+				}
+			}
+		}
+		q = tst_rbt_parent(q);
+	}
 	return;
 }
 
