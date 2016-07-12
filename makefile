@@ -9,7 +9,7 @@ vpath %.cpp src/src      # .cpp at src/src
 inc = -Isrc/includes # or use C_INCLUDE_PATH ,CPLUS_INCLUDE_PATH envir_path
 inc += -Isrc/src	 # += 
 
-objs = tst_tree.o tst_rbtree.o tst_main.o 
+objs = tst_avltree.o tst_tree.o tst_rbtree.o tst_main.o 
 
 rbt:$(objs)
 	g++ -o $@ $(objs) -lm #maybe use gcc -Istdc++ 
@@ -21,6 +21,9 @@ tst_main.o:tst_main.cpp tst_queue.hpp tst_stack.hpp tst_rbtree.h tst_tree.hpp
 	gcc $(inc) -c $<
 	
 tst_rbtree.o:tst_rbtree.c
+	gcc $(inc) -c $^
+
+tst_avltree.o:tst_avltree.c
 	gcc $(inc) -c $^
 
 .PHONY:clean
