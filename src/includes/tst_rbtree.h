@@ -34,7 +34,7 @@ typedef void(*tst_rbt_insert_func)(tst_rbtnode* root, tst_rbtnode* node, tst_rbt
 struct tst_rbtree_t
 {
 	tst_rbtnode*	root;
-	tst_rbtnode*	sentinel;//哨兵
+	tst_rbtnode*	sentinel;/* 哨兵 */
 	tst_rbt_insert_func	insert;
 };
 

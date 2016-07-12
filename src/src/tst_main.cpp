@@ -1,4 +1,4 @@
-ï»¿#include <iostream>
+#include <iostream>
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
@@ -157,11 +157,11 @@ void tst_rbt_main()
 	for (int i = 0; i < len; i++)
 	{
 		node[i] = (tst_rbtnode*)malloc(sizeof(tst_rbtnode));
-		tst_rbt_node_init(node[i], i);
+		tst_rbt_node_init(node[i], i+1);
 		tst_rbt_insert(&t, node[i]);
 		dsprbttree(t.root, t.sentinel); printf("\n"); 
 	}
-	/* æ˜¾ç¤ºæ ‘ */
+	/* ÏÔÊ¾Ê÷ */
 	
 	printf("tree node count:%d  tree height:%d\n",\
 		treenodecount(t.root, t.sentinel), treehigh(t.root,t.sentinel));
@@ -198,7 +198,7 @@ void tst_rbt_main()
 
 #endif
 	tst_rbtnode* p;
-	/* åˆ é™¤èŠ‚ç‚¹ */
+	/* É¾³ı½Úµã */
 #if 1
 	p = tst_rbt_find(&t, t.sentinel, 8);
 	printf("\n del find = %d:\n", p ? p->key : -1);
@@ -212,24 +212,24 @@ void tst_rbt_main()
 	printf("\n");
 #endif
 
-#if 1
+#if 0
 	printf("mirror:\n");
 	mirror(t.root, t.sentinel);
 	dsprbttree(t.root, t.sentinel); printf("\n");
 #endif
 
-#if 1
-	printf("\nè½¬æ¢æˆåŒå‘å¾ªç¯é“¾è¡¨:\n");
+#if 0
+	printf("\n×ª»»³ÉË«ÏòÑ­»·Á´±í:\n");
 	tst_rbtnode* ph = changetolink(t.root,t.sentinel);
 
-	printf("æ­£å‘:");
+	printf("ÕıÏò:");
 	p = ph->lchild;
 	while (p != ph)
 	{
 		printf("%d ", p->key);
 		p = p->lchild;
 	}
-	printf("\nåå‘:");
+	printf("\n·´Ïò:");
 	p = ph->parent;
 	while (p != ph)
 	{
@@ -237,7 +237,7 @@ void tst_rbt_main()
 		p = p->parent;
 	}
 
-	/* é‡Šæ”¾ */
+	/* ÊÍ·Å */
 	tst_rbtnode* pt;
 	p = ph->lchild;
 	while (p != ph)
@@ -276,11 +276,11 @@ void tst_rbt_main()
 	n[6].lchild = &sen;
 	n[6].rchild = &sen;
 
-	judgesym(&n[0], &sen) ? printf("\nå¯¹ç§°\n") : printf("\nä¸å¯¹ç§°\n");
+	judgesym(&n[0], &sen) ? printf("\n¶Ô³Æ\n") : printf("\n²»¶Ô³Æ\n");
 	dsprbttree(&n[0], &sen);
 
 	n[5].key = 4;
-	judgesym(&n[0], &sen) ? printf("\nå¯¹ç§°\n") : printf("\nä¸å¯¹ç§°\n");
+	judgesym(&n[0], &sen) ? printf("\n¶Ô³Æ\n") : printf("\n²»¶Ô³Æ\n");
 	dsprbttree(&n[0], &sen);
 #endif 
 

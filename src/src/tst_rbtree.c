@@ -15,19 +15,19 @@ static tst_rbt_inline void tst_rbt_rotate_left(tst_rbtnode** root, tst_rbtnode* 
 static tst_rbt_inline void tst_rbt_rotate_right(tst_rbtnode** root, tst_rbtnode* node, tst_rbtnode* sentinel);
 
 /*
-* äºŒå‰æŸ¥æ‰¾æ ‘çš„æ’å…¥
+* ¶þ²æ²éÕÒÊ÷µÄ²åÈë
 */
 void tst_rbt_insert_default(tst_rbtnode* parent, tst_rbtnode* node, tst_rbtnode* sentinel)
 {
 	tst_rbtnode** p;
 
 	/*
-	ä¸ºå•¥æœ‰çš„äººå–œæ¬¢foråšæ­»å¾ªçŽ¯å‘¢ï¼Ÿå› ä¸ºç¼–è¯‘ä¼˜åŒ–ä¹‹åŽæ˜¯ä¸€ä¸ªjmpï¼Œè€Œwhileï¼ˆtrueï¼‰è¿˜éœ€è¦testæˆ–è€…cmpæ¯”è¾ƒã€‚å¤šæŒ‡ä»¤
+	ÎªÉ¶ÓÐµÄÈËÏ²»¶for×öËÀÑ­»·ÄØ£¿ÒòÎª±àÒëÓÅ»¯Ö®ºóÊÇÒ»¸öjmp£¬¶øwhile£¨true£©»¹ÐèÒªtest»òÕßcmp±È½Ï¡£¶àÖ¸Áî
 	*/
 	for (;;)
 	{
 		p = (node->key < parent->key) ? &parent->lchild : &parent->rchild;
-		if (*p == sentinel)	/*  æ‰¾åˆ°äº†å¶å­èŠ‚ç‚¹ä¸Šäº†   */
+		if (*p == sentinel)	/*  ÕÒµ½ÁËÒ¶×Ó½ÚµãÉÏÁË   */
 		{
 			break;
 		}
@@ -38,7 +38,7 @@ void tst_rbt_insert_default(tst_rbtnode* parent, tst_rbtnode* node, tst_rbtnode*
 	node->parent = parent;
 	node->lchild = sentinel;
 	node->rchild = sentinel;
-	/* å½“å‰ç»“ç‚¹ä¸ºçº¢è‰²ã€‚è¿æ°”å¥½çš„è¯ï¼Œçˆ¶èŠ‚ç‚¹é¢œè‰²æ˜¯é»‘è‰²ï¼Œè¿˜ä¸ç”¨è°ƒæ•´ã€‚ */
+	/* µ±Ç°½áµãÎªºìÉ«¡£ÔËÆøºÃµÄ»°£¬¸¸½ÚµãÑÕÉ«ÊÇºÚÉ«£¬»¹²»ÓÃµ÷Õû¡£ */
 	tst_rbt_set_red(node);
 }
 
@@ -50,7 +50,7 @@ void tst_rbt_insert(tst_rbtree* tree, tst_rbtnode* node)
 	root = &tree->root;
 	sen = tree->sentinel;
 
-	/* æ–°æ’å…¥çš„ç‚¹æ˜¯æ ¹èŠ‚ç‚¹ */
+	/* ÐÂ²åÈëµÄµãÊÇ¸ù½Úµã */
 	if (*root == sen)
 	{
 		*root = node;
@@ -62,47 +62,47 @@ void tst_rbt_insert(tst_rbtree* tree, tst_rbtnode* node)
 		return;
 	}
 
-	/* è°ƒç”¨ä¸Šé¢çš„tst_rbt_insert_defaultï¼ˆï¼‰ */
+	/* µ÷ÓÃÉÏÃæµÄtst_rbt_insert_default£¨£© */
 	tree->insert(*root, node, sen);
 
-	/* é‡æ–°å¹³è¡¡çº¢é»‘æ ‘ */
+	/* ÖØÐÂÆ½ºâºìºÚÊ÷ */
 	while (node != *root && tst_rbt_is_red(tst_rbt_parent(node)))
 	{
-		/* nodeçˆ¶èŠ‚ç‚¹æ˜¯çº¢è‰²  */
+		/* node¸¸½ÚµãÊÇºìÉ«  */
 		if (tst_rbt_parent(node) == tst_rbt_grandpa(node)->lchild)
 		{	
-			/* çˆ¶èŠ‚ç‚¹æ˜¯ç¥–çˆ¶çš„å·¦å­©å­ */
+			/* ¸¸½ÚµãÊÇ×æ¸¸µÄ×óº¢×Ó */
 			if (tst_rbt_is_red(tst_rbt_lruncle(node, r)))
 			{
-				//å”å”æ˜¯çº¢è‰²ã€‚è°ƒæ•´é¢œè‰²
+				/* ÊåÊåÊÇºìÉ«¡£µ÷ÕûÑÕÉ« */
 				tst_rbt_set_red(tst_rbt_grandpa(node));
 				tst_rbt_set_black(tst_rbt_parent(node));
 				tst_rbt_set_black(tst_rbt_lruncle(node, r));
 				node = tst_rbt_grandpa(node);
-				/* å¾ªçŽ¯å›žåŽ»å†çœ‹nodeçš„parentçš„æƒ…å†µ */
-				/* å‡å¦‚æœ€åŽåˆ°æ ¹èŠ‚ç‚¹ï¼Œè¿™ä¸ªæ—¶å€™æ ¹èŠ‚ç‚¹è®¾ç½®æˆçº¢è‰²ã€‚éœ€è¦åŽé¢è®¾ç½®æ ¹èŠ‚ç‚¹ä¸ºé»‘è‰² */
+				/* Ñ­»·»ØÈ¥ÔÙ¿´nodeµÄparentµÄÇé¿ö */
+				/* ¼ÙÈç×îºóµ½¸ù½Úµã£¬Õâ¸öÊ±ºò¸ù½ÚµãÉèÖÃ³ÉºìÉ«¡£ÐèÒªºóÃæÉèÖÃ¸ù½ÚµãÎªºÚÉ« */
 			}
 			else
 			{
-				/* å”å”æ˜¯é»‘è‰²ã€‚æ—‹è½¬æ ‘ */
+				/* ÊåÊåÊÇºÚÉ«¡£Ðý×ªÊ÷ */
 				if (tst_rbt_is_rchild(node))
 				{
-					/* çˆ¶èŠ‚ç‚¹æ˜¯å·¦å­©å­ï¼Œè‡ªå·±æ˜¯å³å­©å­ï¼Œè¿™ä¸ªæ—¶å€™å°±æ˜¯è‡ªå·±ï¼Œçˆ¶äº²ï¼Œç¥–çˆ¶ï¼Œå”å”è¿žæˆé—­åˆå›¾å½¢æ˜¯è±å½¢ */
+					/* ¸¸½ÚµãÊÇ×óº¢×Ó£¬×Ô¼ºÊÇÓÒº¢×Ó£¬Õâ¸öÊ±ºò¾ÍÊÇ×Ô¼º£¬¸¸Ç×£¬×æ¸¸£¬ÊåÊåÁ¬³É±ÕºÏÍ¼ÐÎÊÇÁâÐÎ */
 					node = tst_rbt_parent(node);
 					tst_rbt_rotate_left(root, node, sen);
 				}
 				tst_rbt_set_red(tst_rbt_grandpa(node));
 				tst_rbt_set_black(tst_rbt_parent(node));
 				tst_rbt_rotate_right(root, tst_rbt_grandpa(node), sen);
-				/* æ—‹è½¬ä¹‹åŽå°±okï¼Œå¾ªçŽ¯ç»“æŸ */
+				/* Ðý×ªÖ®ºó¾Íok£¬Ñ­»·½áÊø */
 			}
 		}
 		else
 		{	
-			/* çˆ¶èŠ‚ç‚¹æ˜¯ç¥–çˆ¶çš„å³å­©å­ï¼Œä¸Žä¸Šé¢æ˜¯å·¦å­©å­çš„æ“ä½œç›¸åå°±å¥½ã€‚ */
+			/* ¸¸½ÚµãÊÇ×æ¸¸µÄÓÒº¢×Ó£¬ÓëÉÏÃæÊÇ×óº¢×ÓµÄ²Ù×÷Ïà·´¾ÍºÃ¡£ */
 			if (tst_rbt_is_red(tst_rbt_lruncle(node,l)))
 			{	
-				/* å”å”æ˜¯çº¢è‰²ã€‚è°ƒæ•´é¢œè‰² */
+				/* ÊåÊåÊÇºìÉ«¡£µ÷ÕûÑÕÉ« */
 				tst_rbt_set_red(tst_rbt_grandpa(node));
 				tst_rbt_set_black(tst_rbt_parent(node));
 				tst_rbt_set_black(tst_rbt_lruncle(node,l));
@@ -133,9 +133,9 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 	root = &tree->root;
 	sentinel = tree->sentinel;
 	
-	/* äºŒå‰æ ‘çš„åˆ é™¤ */
+	/* ¶þ²æÊ÷µÄÉ¾³ý */
 	
-	/* æ‰¾åˆ°è¦åˆ é™¤çš„èŠ‚ç‚¹ã€‚ */
+	/* ÕÒµ½ÒªÉ¾³ýµÄ½Úµã¡£ */
 	if (sentinel == node->lchild)		//fd1
 	{
 		subt = node->rchild;
@@ -148,11 +148,11 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 	}
 	else								//fd3
 	{
-		/* nodeçš„å·¦å³å­©å­éƒ½ä¸ä¸ºç©ºï¼Œé‚£ä¹ˆä»Žå³å­æ ‘ä¸­æ‰¾åˆ°keyæœ€å°çš„èŠ‚ç‚¹ï¼Œäº¤æ¢nodeå’Œè¿™ä¸ªç‚¹ï¼Œå†åˆ é™¤node  */
+		/* nodeµÄ×óÓÒº¢×Ó¶¼²»Îª¿Õ£¬ÄÇÃ´´ÓÓÒ×ÓÊ÷ÖÐÕÒµ½key×îÐ¡µÄ½Úµã£¬½»»»nodeºÍÕâ¸öµã£¬ÔÙÉ¾³ýnode  */
 		temp = tst_rbt_min_node(node->rchild, sentinel);
 		if (temp->lchild == sentinel)
 		{	
-			/* æ—¢ç„¶æ˜¯æœ€å°çš„èŠ‚ç‚¹ï¼Œä¸€å®šè¿›å…¥è¿™ä¸ªåˆ†æ”¯ï¼Œå¦‚æžœè¿˜æœ‰å·¦å­©å­ï¼Œtempè‚¯å®šä¸æ˜¯æœ€å°çš„ */
+			/* ¼ÈÈ»ÊÇ×îÐ¡µÄ½Úµã£¬Ò»¶¨½øÈëÕâ¸ö·ÖÖ§£¬Èç¹û»¹ÓÐ×óº¢×Ó£¬temp¿Ï¶¨²»ÊÇ×îÐ¡µÄ */
 			subt = temp->rchild;
 		}
 		else
@@ -160,7 +160,7 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 			subt = temp->lchild;
 		}
 	}
-	/* å¦‚æžœè¦åˆ é™¤çš„ç‚¹æ˜¯æ ¹èŠ‚ç‚¹ï¼Œè¿™ç§æƒ…å†µåªä¼šæ˜¯fd1ï¼Œfd2ä¸­çš„ä¸€ç§ */
+	/* Èç¹ûÒªÉ¾³ýµÄµãÊÇ¸ù½Úµã£¬ÕâÖÖÇé¿öÖ»»áÊÇfd1£¬fd2ÖÐµÄÒ»ÖÖ */
 	if (temp == *root)
 	{
 		*root = subt;
@@ -171,7 +171,7 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 
 	unsigned char isRed = tst_rbt_is_red(temp);
 
-	/* æŠŠæ‰¾åˆ°çš„èŠ‚ç‚¹ç§»å‡ºæ ‘å¤–ã€‚å­©å­ä¸Šæ  */
+	/* °ÑÕÒµ½µÄ½ÚµãÒÆ³öÊ÷Íâ¡£º¢×ÓÉÏÌá  */
 	if (tst_rbt_is_lchild(temp))
 	{
 		tst_rbt_parent(temp)->lchild = subt;
@@ -182,21 +182,21 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 	}
 	if (temp == node)
 	{	
-		/* å¦‚æžœè¦åˆ é™¤çš„ç‚¹å°±æ˜¯nodeï¼Œé‚£ä¹ˆnodeå·²ç»è¢«ç§»å‡ºæ ‘å¤– */
+		/* Èç¹ûÒªÉ¾³ýµÄµã¾ÍÊÇnode£¬ÄÇÃ´nodeÒÑ¾­±»ÒÆ³öÊ÷Íâ */
 		subt->parent = temp->parent;
 	}
 	else
 	{
-		/* å¦‚æžœè¦åˆ é™¤çš„ç‚¹ä¸æ˜¯nodeï¼Œè€Œæ˜¯å³å­æ ‘ä¸­æœ€å°çš„èŠ‚ç‚¹ */
+		/* Èç¹ûÒªÉ¾³ýµÄµã²»ÊÇnode£¬¶øÊÇÓÒ×ÓÊ÷ÖÐ×îÐ¡µÄ½Úµã */
 
 		if (node == tst_rbt_parent(temp))
 		{
-			/*å¦‚æžœnodeæ˜¯tempçš„çˆ¶èŠ‚ç‚¹ï¼Œé‚£ä¹ˆï¼Œsubtçš„çˆ¶èŠ‚ç‚¹è¿˜æ˜¯tempï¼Œä½†æ˜¯å¦‚æžœsubtæ˜¯sentinelï¼Œé‚£ä¹ˆsentinelä¸€å¼€å§‹parentæ˜¯NULL */
+			/* Èç¹ûnodeÊÇtempµÄ¸¸½Úµã£¬ÄÇÃ´£¬subtµÄ¸¸½Úµã»¹ÊÇtemp£¬µ«ÊÇÈç¹ûsubtÊÇsentinel£¬ÄÇÃ´sentinelÒ»¿ªÊ¼parentÊÇNULL */
 			subt->parent = temp;
 		}
 		else
 		{
-			/* å¦‚æžœä¸æ˜¯ï¼Œé‚£ä¹ˆsubtçš„çˆ¶èŠ‚ç‚¹è¯¥æ˜¯tempçš„çˆ¶èŠ‚ç‚¹ */
+			/* Èç¹û²»ÊÇ£¬ÄÇÃ´subtµÄ¸¸½Úµã¸ÃÊÇtempµÄ¸¸½Úµã */
 			subt->parent = temp->parent;
 		}
 
@@ -207,12 +207,12 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 
 		if (node == *root)
 		{
-			/* å¦‚æžœnodeæ˜¯æ ¹ï¼Œè®¾ç½®æ ¹ä¸ºæ‰¾åˆ°çš„èŠ‚ç‚¹ */
+			/* Èç¹ûnodeÊÇ¸ù£¬ÉèÖÃ¸ùÎªÕÒµ½µÄ½Úµã */
 			*root = temp;
 		}
 		else
 		{
-			/* æŠŠæ‰¾åˆ°çš„ç‚¹æ›¿æ¢node  */
+			/* °ÑÕÒµ½µÄµãÌæ»»node  */
 			if (tst_rbt_is_lchild(node))
 			{
 				tst_rbt_parent(node)->lchild = temp;
@@ -241,27 +241,27 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 	}
 
 
-	/* é‡æ–°å¹³è¡¡çº¢é»‘æ ‘ */
+	/* ÖØÐÂÆ½ºâºìºÚÊ÷ */
 	while (subt != *root && tst_rbt_is_black(subt))
 	{
 		if (tst_rbt_is_lchild(subt))
 		{
 			w = tst_rbt_parent(subt)->rchild;
-			/*å¤æ‚æƒ…å†µ1ï¼š
-			*å…„å¼Ÿæ˜¯çº¢è‰²ï¼Œé‚£ä¹ˆçˆ¶èŠ‚ç‚¹ï¼Œå…„å¼Ÿçš„å­©å­éƒ½æ˜¯é»‘è‰²ã€‚äº¤æ¢å…„å¼Ÿä¸Žçˆ¶äº²çš„é¢œè‰²
-			*ç„¶åŽå·¦æ—‹ã€‚è½¬æ¢æƒ…å†µä¸ºè¦åˆ é™¤çš„ç‚¹çš„å…„å¼Ÿæ˜¯é»‘è‰²ã€‚
+			/* ¸´ÔÓÇé¿ö1£º
+			*ÐÖµÜÊÇºìÉ«£¬ÄÇÃ´¸¸½Úµã£¬ÐÖµÜµÄº¢×Ó¶¼ÊÇºÚÉ«¡£½»»»ÐÖµÜÓë¸¸Ç×µÄÑÕÉ«
+			*È»ºó×óÐý¡£×ª»»Çé¿öÎªÒªÉ¾³ýµÄµãµÄÐÖµÜÊÇºÚÉ«¡£
 			*/
-			if (tst_rbt_is_red(w))//wæ˜¯çº¢è‰²ã€‚åˆ™wçš„parentï¼Œchildå¿…ç„¶æ˜¯é»‘è‰²
+			if (tst_rbt_is_red(w))/*wÊÇºìÉ«¡£ÔòwµÄparent£¬child±ØÈ»ÊÇºÚÉ«*/
 			{
 				tst_rbt_set_red(tst_rbt_parent(subt));
 				tst_rbt_set_black(w);
 				tst_rbt_rotate_left(root, tst_rbt_parent(subt), sentinel);
-				w = tst_rbt_parent(subt)->rchild;//è½¬åŒ–ä¸ºsubtçš„å…„å¼Ÿæ˜¯é»‘è‰²çš„æƒ…å†µ
+				w = tst_rbt_parent(subt)->rchild;/*×ª»¯ÎªsubtµÄÐÖµÜÊÇºÚÉ«µÄÇé¿ö*/
 			}
-			/*å¤æ‚æƒ…å†µ2ï¼š
-			*å¦‚æžœè¦åˆ é™¤çš„ç‚¹çš„å…„å¼Ÿä¸æ˜¯çº¢è‰²ï¼Œå¹¶ä¸”å…„å¼Ÿçš„å·¦å³å­©å­éƒ½æ˜¯é»‘è‰²
-			*é‚£ä¹ˆæŠŠå…„å¼ŸæŸ“æˆçº¢è‰²ï¼Œå†çœ‹çˆ¶èŠ‚ç‚¹ã€‚å¦‚æžœæ˜¯çº¢è‰²ï¼Œè·³å‡ºå¾ªçŽ¯ï¼Œæœ€åŽæŸ“æˆé»‘è‰²ï¼Œok
-			*å¦‚æžœçˆ¶èŠ‚ç‚¹æ˜¯é»‘è‰²ï¼Œé‚£ä¹ˆåˆå›žåˆ°æœ€åŽŸå§‹çš„é—®é¢˜ï¼ˆæƒ…å†µ1234éƒ½å¯èƒ½ï¼‰
+			/* ¸´ÔÓÇé¿ö2£º
+			*Èç¹ûÒªÉ¾³ýµÄµãµÄÐÖµÜ²»ÊÇºìÉ«£¬²¢ÇÒÐÖµÜµÄ×óÓÒº¢×Ó¶¼ÊÇºÚÉ«
+			*ÄÇÃ´°ÑÐÖµÜÈ¾³ÉºìÉ«£¬ÔÙ¿´¸¸½Úµã¡£Èç¹ûÊÇºìÉ«£¬Ìø³öÑ­»·£¬×îºóÈ¾³ÉºÚÉ«£¬ok
+			*Èç¹û¸¸½ÚµãÊÇºÚÉ«£¬ÄÇÃ´ÓÖ»Øµ½×îÔ­Ê¼µÄÎÊÌâ£¨Çé¿ö1234¶¼¿ÉÄÜ£©
 			*/
 			if (tst_rbt_is_black(w->lchild) && tst_rbt_is_black(w->rchild))
 			{
@@ -270,9 +270,9 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 			}
 			else
 			{
-				/* å¤æ‚æƒ…å†µ3ï¼šå…„å¼ŸèŠ‚ç‚¹æœ‰çº¢è‰²å­©å­
-				*å¦‚æžœå…„å¼Ÿçš„è¿œä¾„å­æ˜¯é»‘è‰²ï¼Œé‚£ä¹ˆè‚¯å®šè¿‘äº²ä¾„å­æ˜¯çº¢è‰²ã€‚
-				*æœ€ç»ˆç›®çš„æ˜¯æŠŠè¿œä¾„å­å˜æˆçº¢è‰²ï¼Œè½¬æ¢æˆä¸‹ä¸€ç§æƒ…å†µï¼Œå¯ä»¥æœ€ç»ˆè§£å†³é—®é¢˜ã€‚
+				/* ¸´ÔÓÇé¿ö3£ºÐÖµÜ½ÚµãÓÐºìÉ«º¢×Ó
+				*Èç¹ûÐÖµÜµÄÔ¶Ö¶×ÓÊÇºÚÉ«£¬ÄÇÃ´¿Ï¶¨½üÇ×Ö¶×ÓÊÇºìÉ«¡£
+				*×îÖÕÄ¿µÄÊÇ°ÑÔ¶Ö¶×Ó±ä³ÉºìÉ«£¬×ª»»³ÉÏÂÒ»ÖÖÇé¿ö£¬¿ÉÒÔ×îÖÕ½â¾öÎÊÌâ¡£
 				*/
 
 				if (tst_rbt_is_black(w->rchild))
@@ -283,23 +283,23 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 					w = tst_rbt_parent(subt)->rchild;
 				}
 
-				/* å¤æ‚æƒ…å†µ4ï¼š
-				*å¦‚æžœè¿œä¾„å­æ˜¯çº¢è‰²ï¼Œç›´æŽ¥æŠŠè¿œä¾„å­è®¾ä¸ºé»‘è‰²ï¼Œäº¤æ¢çˆ¶äº²ä¸Žå…„å¼Ÿé¢œè‰²
-				*æœ€ç»ˆé€‰æ‹©åˆé€‚çš„æ—‹è½¬æ–¹å‘æ—‹è½¬å­æ ‘ã€‚è¾¾åˆ°å¹³è¡¡ã€‚
+				/* ¸´ÔÓÇé¿ö4£º
+				*Èç¹ûÔ¶Ö¶×ÓÊÇºìÉ«£¬Ö±½Ó°ÑÔ¶Ö¶×ÓÉèÎªºÚÉ«£¬½»»»¸¸Ç×ÓëÐÖµÜÑÕÉ«
+				*×îÖÕÑ¡ÔñºÏÊÊµÄÐý×ª·½ÏòÐý×ª×ÓÊ÷¡£´ïµ½Æ½ºâ¡£
 				*/
 				tst_rbt_copy_color(w, tst_rbt_parent(subt));
 				tst_rbt_set_black(tst_rbt_parent(subt));
 				tst_rbt_set_black(w->rchild);
 				tst_rbt_rotate_left(root, tst_rbt_parent(subt), sentinel);
-				subt = *root;/* ç»“æŸå¾ªçŽ¯ï¼ŒåŒæ—¶æ–¹ä¾¿åŽç»­è®¾ç½®æ ¹èŠ‚ç‚¹ä¸ºé»‘è‰² */
+				subt = *root;/* ½áÊøÑ­»·£¬Í¬Ê±·½±ãºóÐøÉèÖÃ¸ù½ÚµãÎªºÚÉ« */
 			}
 
 		}
 		else
 		{
-			/* ä¸Žä¸Šé¢ï¼Œåˆ é™¤ç‚¹æ˜¯çˆ¶äº²çš„å·¦å­©å­ç›¸ä¼¼ï¼Œåªä¸è¿‡ï¼Œæ—‹è½¬æ ‘çš„æ—¶å€™æ–¹å‘ä¸Žä¸Šé¢æƒ…å†µç›¸å */
+			/* ÓëÉÏÃæ£¬É¾³ýµãÊÇ¸¸Ç×µÄ×óº¢×ÓÏàËÆ£¬Ö»²»¹ý£¬Ðý×ªÊ÷µÄÊ±ºò·½ÏòÓëÉÏÃæÇé¿öÏà·´ */
 			w = tst_rbt_parent(subt)->lchild;
-			if (tst_rbt_is_red(w))/* wæ˜¯çº¢è‰²ã€‚wçš„parentï¼Œchildå¿…ç„¶æ˜¯é»‘è‰² */
+			if (tst_rbt_is_red(w))/* wÊÇºìÉ«¡£wµÄparent£¬child±ØÈ»ÊÇºÚÉ« */
 			{
 				tst_rbt_set_black(w);
 				tst_rbt_set_red(tst_rbt_parent(subt));
@@ -358,14 +358,14 @@ tst_rbt_inline tst_rbtnode* tst_rbt_min_node(tst_rbtnode* node, tst_rbtnode* sen
 }
 
 /*************************************************************************************
-**    å¦‚ä¸‹å›¾ï¼š20 è¿™ä¸ªèŠ‚ç‚¹å·¦æ—‹ æˆ–è€… å³æ—‹
+**    ÈçÏÂÍ¼£º20 Õâ¸ö½Úµã×óÐý »òÕß ÓÒÐý
 **                                                                                   
 **           30                  30    		          10                   10        
 **           / \                 / \		          / \                  / \       
-**          20  31    å·¦æ—‹      22   31		         9   20      å·¦æ—‹     9   22     
-**         / \      ------->   / \          æˆ–è€…        / \     ------->     / \      
+**          20  31    ×óÐý      22   31		         9   20      ×óÐý     9   22     
+**         / \      ------->   / \          »òÕß        / \     ------->     / \      
 **       18  22    <-------   20  23                  18   22  <--------   20   23  
-**           / \      å³æ—‹   / \   			               / \   å³æ—‹     / \     	
+**           / \      ÓÒÐý   / \   			               / \   ÓÒÐý     / \     	
 **         21   23          18  21			              21  23        18   21   	
 **         										     					  			   
 ***************************************************************************************/
@@ -375,23 +375,23 @@ tst_rbt_rotate_left(tst_rbtnode** root, tst_rbtnode* node, tst_rbtnode* sentinel
 	tst_rbtnode* temp;
 
 	temp = node->rchild;
-	node->rchild = temp->lchild;	//ç›¸å½“äºŽæŠŠ21å˜æˆ20çš„å³å­©å­
+	node->rchild = temp->lchild;	/* Ïàµ±ÓÚ°Ñ21±ä³É20µÄÓÒº¢×Ó */
 
 	if (temp->lchild != sentinel)
 	{
-		temp->lchild->parent = node;//21ä½ç½®æ”¹å˜ä¹‹åŽï¼Œé‡æ–°è®¾ç½®ä»–çš„parent
+		temp->lchild->parent = node;/* 21Î»ÖÃ¸Ä±äÖ®ºó£¬ÖØÐÂÉèÖÃËûµÄparent */
 	}
 	if (node == *root)
 	{
-		*root = temp;				//å¦‚æžœnodeæ˜¯æ ¹èŠ‚ç‚¹ã€‚åˆ™tempæ˜¯æ ¹èŠ‚ç‚¹
+		*root = temp;				/* Èç¹ûnodeÊÇ¸ù½Úµã¡£ÔòtempÊÇ¸ù½Úµã */ 
 	}
 	else if (node == tst_rbt_parent(node)->lchild )
 	{
-		tst_rbt_parent(node)->lchild = temp;//ç¬¬ä¸€å›¾ï¼Œnodeåœ¨çˆ¶èŠ‚ç‚¹çš„å·¦å­©å­èŠ‚ç‚¹
+		tst_rbt_parent(node)->lchild = temp;/* µÚÒ»Í¼£¬nodeÔÚ¸¸½ÚµãµÄ×óº¢×Ó½Úµã */ 
 	}
 	else
 	{
-		tst_rbt_parent(node)->rchild = temp;//ç¬¬äºŒå›¾ï¼Œnodeåœ¨çˆ¶èŠ‚ç‚¹çš„å³å­©å­èŠ‚ç‚¹
+		tst_rbt_parent(node)->rchild = temp;/* µÚ¶þÍ¼£¬nodeÔÚ¸¸½ÚµãµÄÓÒº¢×Ó½Úµã */
 	}
 	temp->parent = tst_rbt_parent(node);
 	temp->lchild = node;

@@ -248,7 +248,7 @@ void mirror(tst_rbtnode* root, tst_rbtnode* sentinel)
 	}
 }
 /*
-* è½¬æ¢æˆæ— å¤´åŒå‘å¾ªç¯é“¾è¡¨ï¼Œä¸­åºéå†çš„æ–¹å¼
+* ×ª»»³ÉÎŞÍ·Ë«ÏòÑ­»·Á´±í£¬ÖĞĞò±éÀúµÄ·½Ê½
 */
 tst_rbtnode* changetolink(tst_rbtnode* root, tst_rbtnode* sentinel)
 {
