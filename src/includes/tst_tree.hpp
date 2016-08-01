@@ -8,45 +8,45 @@ extern "C"
 
 #include "tst_rbtree.h"
 
-/*ç›¸å½“äºå±‚æ¬¡éå†äº†å§ã€‚ */
-void dsprbttree(tst_rbtnode* root, tst_rbtnode* sentinel);
-void dspavltree(tst_rbtnode* root, tst_rbtnode* sentinel = NULL);
+	/*Ïàµ±ÓÚ²ã´Î±éÀúÁË°É¡£ */
+	void dsprbttree(tst_rbtnode* root, tst_rbtnode* sentinel);
+	void dspavltree(tst_rbtnode* root, tst_rbtnode* sentinel = NULL);
 
-int treenodecount(tst_rbtnode* root, tst_rbtnode* sentinel);
-int treehigh(tst_rbtnode* root, tst_rbtnode* sentinel);
-int treehigh_s(tst_rbtnode* root, tst_rbtnode* sentinel);
+	int treenodecount(tst_rbtnode* root, tst_rbtnode* sentinel);
+	int treehigh(tst_rbtnode* root, tst_rbtnode* sentinel);
+	int treehigh_s(tst_rbtnode* root, tst_rbtnode* sentinel);
 
-/*éå†-é€’å½’ */
-void middsptree(tst_rbtnode* root, tst_rbtnode* sentinel);
-void predsptree(tst_rbtnode* root, tst_rbtnode* sentinel);
-void aftdsptree(tst_rbtnode* root, tst_rbtnode* sentinel);
+	/*±éÀú-µİ¹é */
+	void middsptree(tst_rbtnode* root, tst_rbtnode* sentinel);
+	void predsptree(tst_rbtnode* root, tst_rbtnode* sentinel);
+	void aftdsptree(tst_rbtnode* root, tst_rbtnode* sentinel);
 
-/*éå†-æ ˆ */
-void predsptree_s_1(tst_rbtnode* root, tst_rbtnode* sentinel);
-void predsptree_s_2(tst_rbtnode* root, tst_rbtnode* sentinel);
+	/*±éÀú-Õ» */
+	void predsptree_s_1(tst_rbtnode* root, tst_rbtnode* sentinel);
+	void predsptree_s_2(tst_rbtnode* root, tst_rbtnode* sentinel);
 
-void middsptree_s_1(tst_rbtnode* root, tst_rbtnode* sentinel);
-void middsptree_s_2(tst_rbtnode* root, tst_rbtnode* sentinel);
+	void middsptree_s_1(tst_rbtnode* root, tst_rbtnode* sentinel);
+	void middsptree_s_2(tst_rbtnode* root, tst_rbtnode* sentinel);
 
-void middsptree_s_s(tst_rbtnode* root, tst_rbtnode* sentinel);
+	void middsptree_s_s(tst_rbtnode* root, tst_rbtnode* sentinel);
 
-void aftdsptree_s_1(tst_rbtnode* root, tst_rbtnode* sentinel);
-void aftdsptree_s_2(tst_rbtnode* root, tst_rbtnode* sentinel);
+	void aftdsptree_s_1(tst_rbtnode* root, tst_rbtnode* sentinel);
+	void aftdsptree_s_2(tst_rbtnode* root, tst_rbtnode* sentinel);
 
-/*é•œåƒ */
-void mirror(tst_rbtnode* root, tst_rbtnode* sentinel);
+	/*¾µÏñ */
+	void mirror(tst_rbtnode* root, tst_rbtnode* sentinel);
 
-/*åˆ¤æ–­æ ‘æ˜¯å¦å¯¹ç§°ï¼Œçº¢é»‘æ ‘ä¸å¯èƒ½æ˜¯å¯¹ç§°(symmetry)çš„ã€‚ã€‚ */
-bool judgesym(tst_rbtnode* root, tst_rbtnode* sentinel);
+	/*ÅĞ¶ÏÊ÷ÊÇ·ñ¶Ô³Æ£¬ºìºÚÊ÷²»¿ÉÄÜÊÇ¶Ô³Æ(symmetry)µÄ¡£¡£ */
+	bool judgesym(tst_rbtnode* root, tst_rbtnode* sentinel);
 
-/*çº¢é»‘æ ‘è½¬æ¢ä¸ºåŒå‘é“¾è¡¨ */
-tst_rbtnode* changetolink(tst_rbtnode* root, tst_rbtnode* sentinel);
+	/*ºìºÚÊ÷×ª»»ÎªË«ÏòÁ´±í */
+	tst_rbtnode* changetolink(tst_rbtnode* root, tst_rbtnode* sentinel);
 
-void destoytree(tst_rbtnode* root, tst_rbtnode* sentinel);
+	void destoytree(tst_rbtnode* root, tst_rbtnode* sentinel);
 
 
 #ifdef __cplusplus
 }
 #endif //__cplusplus
 
-#endif //_MAIN_H_
+#endif //_MAIN_H_#pragma once

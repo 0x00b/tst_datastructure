@@ -14,16 +14,13 @@ public:
 
 	~TstStack()
 	{
-		if (list)
-		{
-			delete list;
-		}
+		delete list;
 	}
 	int size()
 	{
 		return list->size();
 	}
-	
+
 	bool empty()
 	{
 		return list->empty();

@@ -1,22 +1,22 @@
-ï»¿#ifndef _TST_CONSTRUCT_H_
+#ifndef _TST_CONSTRUCT_H_
 #define _TST_CONSTRUCT_H_
 
 #include <stdio.h>
 #include <new>
 #include "tst_traits.hpp"
 
-template<class T1, class T2> 
+template<class T1, class T2>
 inline void TstConstruct(T1* p, const T2& t)
 {
-	//construct(),ä¸»è¦åŠŸèƒ½å‰é¢å·²ç»è¯´æ˜ï¼Œå…¶åœ¨æŒ‡å®šå†…å­˜ä¸Šæ„é€ å¯¹è±¡
-	//placement new.è°ƒç”¨T1::T1(t)
+	//construct(),Ö÷Òª¹¦ÄÜÇ°ÃæÒÑ¾­ËµÃ÷£¬ÆäÔÚÖ¸¶¨ÄÚ´æÉÏ¹¹Ôì¶ÔÏó
+	//placement new.µ÷ÓÃT1::T1(t)
 	new ((void*)p) T1(t);
 }
 template<class T1>
 inline void TstConstruct(T1* p)
 {
-	//construct(),ä¸»è¦åŠŸèƒ½å‰é¢å·²ç»è¯´æ˜ï¼Œå…¶åœ¨æŒ‡å®šå†…å­˜ä¸Šæ„é€ å¯¹è±¡
-	//placement new.è°ƒç”¨T1::T1(t)
+	//construct(),Ö÷Òª¹¦ÄÜÇ°ÃæÒÑ¾­ËµÃ÷£¬ÆäÔÚÖ¸¶¨ÄÚ´æÉÏ¹¹Ôì¶ÔÏó
+	//placement new.µ÷ÓÃT1::T1(t)
 	new ((void*)p) T1();
 }
 
@@ -39,7 +39,7 @@ inline void _tst_destroy(T1 first, T1 last, tst_truetype)
 {
 }
 
-template<class T1 ,class T2>
+template<class T1, class T2>
 inline void tst_destroy(T1 first, T1 last, T2*)
 {
 	typedef typename TstTypeTraits<T2>::has_trivial_desturctor trivial_destructor;
@@ -58,7 +58,7 @@ inline void TstDestroy(int* t, int* t1) {}
 inline void TstDestroy(long* t, long* t1) {}
 inline void TstDestroy(float* t, float* t1) {}
 inline void TstDestroy(double* t, double* t1) {}
-/*å¦‚æœæœ‰wchar_tçš„è¯*/
+/*Èç¹ûÓĞwchar_tµÄ»°*/
 inline void TstDestroy(wchar_t* t, wchar_t* t1) {}
 /*...*/
 

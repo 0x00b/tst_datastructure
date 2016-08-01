@@ -19,11 +19,11 @@ template<class T>
 struct TstListIterator //:public std::iterator<std::forward_iterator_tag,T>
 {
 	//
-	typedef T value_type;	//è¿­ä»£å™¨æ‰€æŒ‡çš„ç±»å‹
-	typedef T* pointer;		//è¿­ä»£å™¨æ‰€æŒ‡çš„ç±»å‹çš„æŒ‡é’ˆç±»å‹
-	typedef T& refrence;	//è¿­ä»£å™¨æ‰€æŒ‡çš„ç±»å‹çš„å¼•ç”¨ç±»å‹
-//	typedef  iterator_category;	//è¿­ä»£å™¨çš„ç±»å‹
-//	typedef int difference_type;	//è¿­ä»£å™¨ç›´æ¥çš„è·ç¦» int arr[] ; arr + 1 == a[1];
+	typedef T value_type;	//µü´úÆ÷ËùÖ¸µÄÀàĞÍ
+	typedef T* pointer;		//µü´úÆ÷ËùÖ¸µÄÀàĞÍµÄÖ¸ÕëÀàĞÍ
+	typedef T& refrence;	//µü´úÆ÷ËùÖ¸µÄÀàĞÍµÄÒıÓÃÀàĞÍ
+							//	typedef  iterator_category;	//µü´úÆ÷µÄÀàĞÍ
+							//	typedef int difference_type;	//µü´úÆ÷Ö±½ÓµÄ¾àÀë int arr[] ; arr + 1 == a[1];
 
 	typedef const T* const_pointer;
 	typedef const T& const_refrence;
@@ -33,15 +33,15 @@ struct TstListIterator //:public std::iterator<std::forward_iterator_tag,T>
 
 	linktype node;
 
-	TstListIterator() 
+	TstListIterator()
 	{
 	}
 
-	TstListIterator(linktype n):node(n)
+	TstListIterator(linktype n) :node(n)
 	{
 	}
 
-	TstListIterator(const TstListIterator<T>& it):node(it.node)
+	TstListIterator(const TstListIterator<T>& it) :node(it.node)
 	{
 	}
 
@@ -57,10 +57,9 @@ struct TstListIterator //:public std::iterator<std::forward_iterator_tag,T>
 
 	bool operator==(const iterator& it)const
 	{
-		printf("==");
 		return it.node == this->node;
 	}
-	bool operator!=(const iterator& it)const 
+	bool operator!=(const iterator& it)const
 	{
 		return it.node != this->node;
 	}
@@ -71,14 +70,14 @@ struct TstListIterator //:public std::iterator<std::forward_iterator_tag,T>
 	}
 
 	/*
-	* åœ¨è¿­ä»£å™¨ä¸­ï¼Œå‰ç½®++å’Œåç½®++çš„åŒºåˆ«å°±ä½“ç°å‡ºæ¥äº†
+	* ÔÚµü´úÆ÷ÖĞ£¬Ç°ÖÃ++ºÍºóÖÃ++µÄÇø±ğ¾ÍÌåÏÖ³öÀ´ÁË
 	*/
 	iterator& operator++()
 	{
 		node = (linktype)(node->next);
 		return *this;
 	}
-	//å¾Œç½®++
+	//ááÖÃ++
 	iterator operator++(int)
 	{
 		iterator temp = *this;
@@ -90,7 +89,7 @@ struct TstListIterator //:public std::iterator<std::forward_iterator_tag,T>
 		node = (linktype)(node->prev);
 		return *this;
 	}
-	//å¾Œç½®--
+	//ááÖÃ--
 	iterator operator--(int)
 	{
 		iterator temp = *this;
@@ -143,7 +142,7 @@ public:
 		linktype temp = GetNode();
 
 		/*
-		* æ„é€ data
+		* ¹¹Ôìdata
 		*/
 		TstConstruct(&temp->data, t);
 
@@ -160,11 +159,12 @@ public:
 		((linktype)((pos.node)->next))->prev = (pos.node)->prev;
 
 		/*:
-		* å¯¹node->data åšç›¸åº”çš„é‡Šæ”¾åŠ¨ä½œ
+		* ¶Ônode->data ×öÏàÓ¦µÄÊÍ·Å¶¯×÷
 		*/
 		TstDestroy(&(*pos));
 
-		delete pos.node;
+		//delete pos.node;
+		free(pos.node);
 		--lenth;
 	}
 
@@ -199,11 +199,17 @@ public:
 private:
 	int lenth;
 
-	TstListNode<T>* head; /* é“¾è¡¨çš„å¤´ç»“ç‚¹ã€‚ */
+	TstListNode<T>* head; /* Á´±íµÄÍ·½áµã¡£ */
 
-	TstListNode<T>* GetNode() /* ç”¨æ¥è·å¾—ä¸€ä¸ªèŠ‚ç‚¹ã€‚ */
+	TstListNode<T>* GetNode()  /* ÓÃÀ´»ñµÃÒ»¸ö½Úµã¡£ */
 	{
-		return  new TstListNode<T>();
+		TstListNode<T>* temp = (TstListNode<T>*)malloc(sizeof(TstListNode<T>));
+		if (NULL == temp)
+		{
+			//throw ...
+		}
+		memset(temp, 0x00, sizeof(TstListNode<T>));
+		return temp;
 	}
 };
 

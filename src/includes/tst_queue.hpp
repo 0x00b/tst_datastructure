@@ -4,7 +4,7 @@
 #include "tst_list.hpp"
 
 template<class T>
- class TstQueue
+class TstQueue
 {
 public:
 	TstQueue()
@@ -14,10 +14,7 @@ public:
 
 	~TstQueue()
 	{
-		if (list)
-		{
-			delete list;
-		}
+		delete list;
 	}
 	int size()
 	{
@@ -36,7 +33,7 @@ public:
 	{
 		return list->empty();
 	}
-	
+
 	void pop()
 	{
 		list->pop_front();

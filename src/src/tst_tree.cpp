@@ -27,7 +27,7 @@ int treenodecount(tst_rbtnode* root, tst_rbtnode* sentinel)
 	{
 		return 0;
 	}
-	return 1 + treenodecount( root->lchild, sentinel)+ treenodecount(root->rchild, sentinel);
+	return 1 + treenodecount(root->lchild, sentinel) + treenodecount(root->rchild, sentinel);
 }
 
 void predsptree(tst_rbtnode* root, tst_rbtnode* sentinel)
@@ -74,7 +74,7 @@ void predsptree_s_2(tst_rbtnode* root, tst_rbtnode* sentinel)
 	{
 		p = s.top();
 		s.pop();
-		printf("%d ",p->key);
+		printf("%d ", p->key);
 		if (p->rchild != sentinel)
 		{
 			s.push(p->rchild);
@@ -172,7 +172,7 @@ void aftdsptree_s_1(tst_rbtnode* root, tst_rbtnode* sentinel)
 	tst_rbtnode* visited = sentinel;
 	TstStack<tst_rbtnode*> s;
 
-	while (p!=sentinel || !s.empty())
+	while (p != sentinel || !s.empty())
 	{
 		while (p != sentinel)
 		{
@@ -182,7 +182,7 @@ void aftdsptree_s_1(tst_rbtnode* root, tst_rbtnode* sentinel)
 		p = s.top();
 		if (p->rchild == sentinel || p->rchild == visited)
 		{
-			printf("%d ",p->key);
+			printf("%d ", p->key);
 			s.pop();
 			visited = p;
 			p = sentinel;
@@ -240,7 +240,7 @@ void mirror(tst_rbtnode* root, tst_rbtnode* sentinel)
 
 	if (root->lchild != sentinel)
 	{
-		mirror(root->lchild,sentinel);
+		mirror(root->lchild, sentinel);
 	}
 	if (root->rchild != sentinel)
 	{
@@ -256,7 +256,7 @@ tst_rbtnode* changetolink(tst_rbtnode* root, tst_rbtnode* sentinel)
 	tst_rbtnode* p = root;
 	tst_rbtnode* t = sentinel;
 	tst_rbtnode* ph = sentinel;
-	while (p!=sentinel || !s.empty())
+	while (p != sentinel || !s.empty())
 	{
 		while (p != sentinel)
 		{

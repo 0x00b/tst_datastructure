@@ -70,7 +70,7 @@ void tst_rbt_insert(tst_rbtree* tree, tst_rbtnode* node)
 	{
 		/* node父节点是红色  */
 		if (tst_rbt_parent(node) == tst_rbt_grandpa(node)->lchild)
-		{	
+		{
 			/* 父节点是祖父的左孩子 */
 			if (tst_rbt_is_red(tst_rbt_lruncle(node, r)))
 			{
@@ -98,14 +98,14 @@ void tst_rbt_insert(tst_rbtree* tree, tst_rbtnode* node)
 			}
 		}
 		else
-		{	
+		{
 			/* 父节点是祖父的右孩子，与上面是左孩子的操作相反就好。 */
-			if (tst_rbt_is_red(tst_rbt_lruncle(node,l)))
-			{	
+			if (tst_rbt_is_red(tst_rbt_lruncle(node, l)))
+			{
 				/* 叔叔是红色。调整颜色 */
 				tst_rbt_set_red(tst_rbt_grandpa(node));
 				tst_rbt_set_black(tst_rbt_parent(node));
-				tst_rbt_set_black(tst_rbt_lruncle(node,l));
+				tst_rbt_set_black(tst_rbt_lruncle(node, l));
 				node = tst_rbt_grandpa(node);
 			}
 			else
@@ -132,9 +132,9 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 	tst_rbtnode **root, *subt, *temp, *sentinel, *w;
 	root = &tree->root;
 	sentinel = tree->sentinel;
-	
+
 	/* 二叉树的删除 */
-	
+
 	/* 找到要删除的节点。 */
 	if (sentinel == node->lchild)		//fd1
 	{
@@ -151,7 +151,7 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 		/* node的左右孩子都不为空，那么从右子树中找到key最小的节点，交换node和这个点，再删除node  */
 		temp = tst_rbt_min_node(node->rchild, sentinel);
 		if (temp->lchild == sentinel)
-		{	
+		{
 			/* 既然是最小的节点，一定进入这个分支，如果还有左孩子，temp肯定不是最小的 */
 			subt = temp->rchild;
 		}
@@ -181,7 +181,7 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 		tst_rbt_parent(temp)->rchild = subt;
 	}
 	if (temp == node)
-	{	
+	{
 		/* 如果要删除的点就是node，那么node已经被移出树外 */
 		subt->parent = temp->parent;
 	}
@@ -234,7 +234,7 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 	}
 
 	tst_rbt_node_reset(node);
-	
+
 	if (isRed)
 	{
 		return;
@@ -333,7 +333,7 @@ void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node)
 }
 
 
-tst_rbtnode* tst_rbt_find(tst_rbtree* tree, tst_rbtnode* sentinel,unsigned int key)
+tst_rbtnode* tst_rbt_find(tst_rbtree* tree, tst_rbtnode* sentinel, unsigned int key)
 {
 	tst_rbtnode* root = tree->root;
 
@@ -359,17 +359,17 @@ tst_rbt_inline tst_rbtnode* tst_rbt_min_node(tst_rbtnode* node, tst_rbtnode* sen
 
 /*************************************************************************************
 **    如下图：20 这个节点左旋 或者 右旋
-**                                                                                   
-**           30                  30    		          10                   10        
-**           / \                 / \		          / \                  / \       
-**          20  31    左旋      22   31		         9   20      左旋     9   22     
-**         / \      ------->   / \          或者        / \     ------->     / \      
-**       18  22    <-------   20  23                  18   22  <--------   20   23  
-**           / \      右旋   / \   			               / \   右旋     / \     	
-**         21   23          18  21			              21  23        18   21   	
-**         										     					  			   
+**
+**           30                  30    		          10                   10
+**           / \                 / \		          / \                  / \
+**          20  31    左旋      22   31		         9   20      左旋     9   22
+**         / \      ------->   / \          或者        / \     ------->     / \
+**       18  22    <-------   20  23                  18   22  <--------   20   23
+**           / \      右旋   / \   			               / \   右旋     / \
+**         21   23          18  21			              21  23        18   21
+**
 ***************************************************************************************/
-static tst_rbt_inline void 
+static tst_rbt_inline void
 tst_rbt_rotate_left(tst_rbtnode** root, tst_rbtnode* node, tst_rbtnode* sentinel)
 {
 	tst_rbtnode* temp;
@@ -383,11 +383,11 @@ tst_rbt_rotate_left(tst_rbtnode** root, tst_rbtnode* node, tst_rbtnode* sentinel
 	}
 	if (node == *root)
 	{
-		*root = temp;				/* 如果node是根节点。则temp是根节点 */ 
+		*root = temp;				/* 如果node是根节点。则temp是根节点 */
 	}
-	else if (node == tst_rbt_parent(node)->lchild )
+	else if (node == tst_rbt_parent(node)->lchild)
 	{
-		tst_rbt_parent(node)->lchild = temp;/* 第一图，node在父节点的左孩子节点 */ 
+		tst_rbt_parent(node)->lchild = temp;/* 第一图，node在父节点的左孩子节点 */
 	}
 	else
 	{
@@ -399,7 +399,7 @@ tst_rbt_rotate_left(tst_rbtnode** root, tst_rbtnode* node, tst_rbtnode* sentinel
 
 }
 
-static tst_rbt_inline void 
+static tst_rbt_inline void
 tst_rbt_rotate_right(tst_rbtnode** root, tst_rbtnode* node, tst_rbtnode* sentinel)
 {
 	tst_rbtnode* temp;

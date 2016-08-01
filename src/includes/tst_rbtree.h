@@ -14,7 +14,7 @@
 
 typedef struct tst_rbtnode_t tst_rbtnode;
 
-/* æ ‘çš„èŠ‚ç‚¹ç»“æ„ */
+/* Ê÷µÄ½Úµã½á¹¹ */
 struct tst_rbtnode_t
 {
 	unsigned int	key;
@@ -23,18 +23,19 @@ struct tst_rbtnode_t
 	tst_rbtnode*	rchild;
 	int				height;
 	unsigned char	color;
-	unsigned char	data;
+	unsigned char*	data;
+
 };
 
 
 typedef struct tst_rbtree_t tst_rbtree;
 typedef void(*tst_rbt_insert_func)(tst_rbtnode* root, tst_rbtnode* node, tst_rbtnode* sen);
 
-/* æ ‘ç»“æ„ */
+/* Ê÷½á¹¹ */
 struct tst_rbtree_t
 {
 	tst_rbtnode*	root;
-	tst_rbtnode*	sentinel;/* å“¨å…µ */
+	tst_rbtnode*	sentinel;/* ÉÚ±ø */
 	tst_rbt_insert_func	insert;
 };
 
@@ -79,13 +80,13 @@ do											\
 
 #define tst_rbt_node_reset(node) tst_rbt_node_init(node, 0)
 
-/* ä¸€äº›æ“ä½œå‡½æ•° */
+/* Ò»Ğ©²Ù×÷º¯Êı */
 void tst_rbt_insert_default(tst_rbtnode* parent, tst_rbtnode* node, tst_rbtnode* sentinel);
 void tst_rbt_insert(tst_rbtree* tree, tst_rbtnode* node);
 void tst_rbt_delete(tst_rbtree* tree, tst_rbtnode* node);
 void tst_rbt_free(tst_rbtree* tree);
 
-tst_rbtnode* tst_rbt_find(tst_rbtree* tree, tst_rbtnode* sentinel,unsigned int key);
+tst_rbtnode* tst_rbt_find(tst_rbtree* tree, tst_rbtnode* sentinel, unsigned int key);
 
 tst_rbt_inline tst_rbtnode* tst_rbt_min_node(tst_rbtnode* node, tst_rbtnode* sentinel);
 

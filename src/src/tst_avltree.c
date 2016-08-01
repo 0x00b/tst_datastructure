@@ -18,25 +18,23 @@ tst_rbt_inline int tst_avl_height(tst_avlnode* node)
 tst_rbt_inline int tst_avl_factor(tst_avlnode* node)
 {
 	return abs(tst_avl_height(node->rchild) - tst_avl_height(node->lchild));
-	 
+
 }
 
 /*************************************************************************************
-**    如下图：insert 23 
+**    如下图：insert 23
 **
-**           30                   30               30                         22   
-**           / \                  / \   	       / \        		         /   \  
-**          20  31              20  31 		     22   31 			       20     30 
-**         / \      ------->    / \    ---->    /   \       ------>	      /      /  \ 
+**           30                   30               30                         22
+**           / \                  / \   	       / \        		         /   \
+**          20  31              20  31 		     22   31 			       20     30
+**         / \      ------->    / \    ---->    /   \       ------>	      /      /  \
 **       18  22               18  22    	  20    23  			    18     23    31
-**                                  \         /       				           
-**                                  23 	    18        				         
+**                                  \         /
+**                                  23 	    18
 **  递归
 ***************************************************************************************/
 tst_avlnode* tst_avl_insert(tst_avlnode** root, tst_avlnode* node)
 {
-	tst_avlnode** p;
-
 	assert(root && node);
 
 	if (NULL == *root)
@@ -45,48 +43,48 @@ tst_avlnode* tst_avl_insert(tst_avlnode** root, tst_avlnode* node)
 		return *root;
 	}
 
-	tst_avlnode* q = *root;
+	tst_avlnode** q = root;
 	int factor = 0;
 	/* insert  & rebalace*/
-	if (node->key > q->key)
+	if (node->key > (*q)->key)
 	{	/* 往右子树中插入 */
-		q->rchild = tst_avl_insert(&q->rchild, node);
-		tst_avl_set_pa(q->rchild, q);
+		(*q)->rchild = tst_avl_insert(&(*q)->rchild, node);
+		tst_avl_set_pa((*q)->rchild, (*q));
 
-		factor = tst_avl_factor(q);
+		factor = tst_avl_factor((*q));
 		if (2 == factor)
 		{	/* 如果平衡被打破了 */
-			if (node->key < q->rchild->key)
+			if (node->key < (*q)->rchild->key)
 			{	/* 如果是插入在右子树的左子树 */
-				tst_avl_rotate_right(&q->rchild);
+				tst_avl_rotate_right(&(*q)->rchild);
 			}
-			tst_avl_rotate_left(&q);
+			tst_avl_rotate_left(q);
 		}
 	}
 	else
-	{	/* node->key < q->key 插入在左子树 */
-		q->lchild = tst_avl_insert(&q->lchild, node);
-		tst_avl_set_pa(q->lchild, q);
+	{	/* node->key < (*q)->key 插入在左子树 */
+		(*q)->lchild = tst_avl_insert(&(*q)->lchild, node);
+		tst_avl_set_pa((*q)->lchild, (*q));
 
-		factor = tst_avl_factor(q);
+		factor = tst_avl_factor(*q);
 		if (2 == factor)
 		{	/* 如果平衡被打破了 */
-			if (node->key > q->lchild->key)
+			if (node->key > (*q)->lchild->key)
 			{	/* 如果是插入在右子树的左子树 */
-				tst_avl_rotate_left(&q->lchild);
+				tst_avl_rotate_left(&(*q)->lchild);
 			}
-			tst_avl_rotate_right(&q);
+			tst_avl_rotate_right(q);
 		}
 	}
-	q->height = tst_avl_max(tst_avl_height(q->lchild), tst_avl_height(q->rchild)) + 1;
-	return q;
+	(*q)->height = tst_avl_max(tst_avl_height((*q)->lchild), tst_avl_height((*q)->rchild)) + 1;
+	return (*q);
 }
 
 /***********************************************
- * 非递归, 如果保存了父节点的话。那就好办了
- * 如果没有父节点的话，递归会比较方便
- * 最初版本。。。分支没有归纳。。。
- **********************************************/
+* 非递归, 如果保存了父节点的话。那就好办了
+* 如果没有父节点的话，递归会比较方便
+* 最初版本。。。分支没有归纳。。。
+**********************************************/
 void tst_avl_delete_beta(tst_avlnode** root, tst_avlnode* node)
 {
 	tst_avlnode* p = NULL;
@@ -104,7 +102,7 @@ void tst_avl_delete_beta(tst_avlnode** root, tst_avlnode* node)
 			*root = NULL;
 			return;
 		}
-		if (tst_avl_height(node->lchild) < tst_avl_height(node->rchild) )
+		if (tst_avl_height(node->lchild) < tst_avl_height(node->rchild))
 		{
 			pNd = tst_avl_min_node(node->rchild);
 		}
@@ -305,7 +303,7 @@ void tst_avl_delete_beta(tst_avlnode** root, tst_avlnode* node)
 	/* rebalance ,还有bug，不想写了*/
 	while (p && (2 == tst_avl_factor(p)))
 	{
-		pNd = p->parent; 
+		pNd = p->parent;
 		if (NULL != pNd)
 		{
 
@@ -354,7 +352,7 @@ void tst_avl_delete_beta(tst_avlnode** root, tst_avlnode* node)
 
 
 /***********************************************
-* delete  
+* delete
 **********************************************/
 void tst_avl_delete(tst_avlnode** root, tst_avlnode* node)
 {
@@ -366,7 +364,7 @@ void tst_avl_delete(tst_avlnode** root, tst_avlnode* node)
 	assert(root && *root && node);
 
 	/* 先找到替换的节点 */
-	if (NULL == node->lchild) 
+	if (NULL == node->lchild)
 	{	/* 查找情况1 */
 		pNd = node->rchild;
 		p = node;
@@ -386,7 +384,7 @@ void tst_avl_delete(tst_avlnode** root, tst_avlnode* node)
 		{
 			p = tst_avl_max_node(node->lchild);
 		}
-		if ( NULL == p->lchild)
+		if (NULL == p->lchild)
 		{
 			pNd = p->rchild;
 		}
@@ -404,7 +402,7 @@ void tst_avl_delete(tst_avlnode** root, tst_avlnode* node)
 	}
 
 	/* 经过p == *root判断后， node/p->parent 不会是NULL了。
-	 * 替换 node，node移出树外 */
+	* 替换 node，node移出树外 */
 
 	/* 找到的节点（p）拿到树外 */
 
@@ -481,7 +479,7 @@ void tst_avl_delete(tst_avlnode** root, tst_avlnode* node)
 				else
 				{
 					tst_rbt_is_lchild(q)
-						? (tst_rbt_parent(q)->lchild = tst_avl_rotate_left(&q)) 
+						? (tst_rbt_parent(q)->lchild = tst_avl_rotate_left(&q))
 						: (tst_rbt_parent(q)->rchild = tst_avl_rotate_left(&q));
 				}
 			}
@@ -513,8 +511,8 @@ void tst_avl_delete(tst_avlnode** root, tst_avlnode* node)
 **          20  31              20  31 	<----    22   31 			       20     30
 **         / \      ------->    / \    ---->    /   \       ------>	      /      /  \
 **       18  22               18  22      L   20    23  			    18     23    31
-**                               /  \         / \ 
-**                                  23 	    18   
+**                               /  \         / \
+**                                  23 	    18
 **
 ***************************************************************************************/
 tst_avlnode* tst_avl_rotate_left(tst_avlnode** node)

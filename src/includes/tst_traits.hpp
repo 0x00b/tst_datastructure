@@ -7,14 +7,15 @@ struct TstIteratorTraits
 	typedef typename T::value_type value_type;
 };
 
+
 template<typename T>
 struct TstIteratorTraits<T*>
 {
-	typedef T value_type;
+	typedef typename T::value_type value_type;
 };
 
 
-template<typename TstIter> 
+template<typename TstIter>
 typename TstIteratorTraits<TstIter>::value_type*
 TstValueType(const TstIter& it)
 {
@@ -30,18 +31,18 @@ struct tst_truetype {};
 template<class T>
 struct TstTypeTraits
 {
-//	typedef  tst_falsetype this_dummy_member_must_be_first;
+	//	typedef  tst_falsetype this_dummy_member_must_be_first;
 	/*
-	* è¿™é‡Œæˆ‘çš„type_traitså‘½åä¸æ˜¯å’Œstlä¸­ä¸€æ ·ï¼Œæ‰€ä»¥è¿™ä¸€ä¸ªæˆå‘˜å®šä¹‰æœ‰æ²¡æœ‰å…¶å®æ— æ‰€è°“
-	* æŒ‰ç…§åŸæ¥stlä¸­çš„æ³¨é‡Šï¼Œæˆ‘ç†è§£æ˜¯è¿™ä¸ªæˆå‘˜è·Ÿç¼–è¯‘å™¨æœ‰å…³ï¼Œå¦‚æœä¸€ä¸ªæ¨¡æ¿çš„åå­—æ˜¯__type_traitsã€‚
-	* å› ä¸ºç¼–è¯‘å™¨å¯èƒ½ä¼šæœ‰è‡ªå·±å®šä¹‰çš„__type_traitsã€‚
+	* ÕâÀïÎÒµÄtype_traitsÃüÃû²»ÊÇºÍstlÖĞÒ»Ñù£¬ËùÒÔÕâÒ»¸ö³ÉÔ±¶¨ÒåÓĞÃ»ÓĞÆäÊµÎŞËùÎ½
+	* °´ÕÕÔ­À´stlÖĞµÄ×¢ÊÍ£¬ÎÒÀí½âÊÇÕâ¸ö³ÉÔ±¸ú±àÒëÆ÷ÓĞ¹Ø£¬Èç¹ûÒ»¸öÄ£°åµÄÃû×ÖÊÇ__type_traits¡£
+	* ÒòÎª±àÒëÆ÷¿ÉÄÜ»áÓĞ×Ô¼º¶¨ÒåµÄ__type_traits¡£
 	*/
-	typedef  tst_falsetype has_trivial_defualt_constructor;	//æœ‰é»˜è®¤çš„æ„é€ å‡½æ•°
-	typedef  tst_falsetype has_trivial_copy_constructor;	//æœ‰æ‹·è´æ„é€ 
-	typedef  tst_falsetype has_trivial_assignment_operator;	//æœ‰èµ‹å€¼å…ƒç®—ç¬¦ =
-	typedef  tst_falsetype has_trivial_desturctor;			//æœ‰ææ„
+	typedef  tst_falsetype has_trivial_defualt_constructor;	//ÓĞÄ¬ÈÏµÄ¹¹Ôìº¯Êı
+	typedef  tst_falsetype has_trivial_copy_constructor;	//ÓĞ¿½±´¹¹Ôì
+	typedef  tst_falsetype has_trivial_assignment_operator;	//ÓĞ¸³ÖµÔªËã·û =
+	typedef  tst_falsetype has_trivial_desturctor;			//ÓĞÎö¹¹
 	typedef  tst_falsetype is_POD_type;						//POD is Plain Old Data,
-															//å¤§æ¦‚æ˜¯å†…ç½®çš„ç±»å‹æ¯”å¦‚intï¼Œfloat
+															//´ó¸ÅÊÇÄÚÖÃµÄÀàĞÍ±ÈÈçint£¬float
 };
 template<class T>
 struct TstTypeTraits<T*>
