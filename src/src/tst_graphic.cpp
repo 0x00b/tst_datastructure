@@ -142,23 +142,28 @@ void TstGraphicMtx::TraverseBreadthFirst()
 	std::cout << "Traverse Breadth-First£º" << std::endl;
 
 	memset(m_pVisited, 0x00, m_nMax * sizeof(bool));
-	
-	nodepos ndp(0);
+	nodepos ndp;
 	TstQueue<nodepos> tq;
-	tq.push(ndp);
-	m_pVisited[ndp] = true;
-	visit(ndp);
-	while (!tq.empty())
+	for (nodepos i = 0; i < m_nMax; i++)
 	{
-		ndp = tq.front();
-		tq.pop();
-		for (nodepos i = 0; i < m_nMax; i++)
+		if (!m_pVisited[i])
 		{
-			if ((M_INFINITY != m_pAdcy_mtx[ndp][i]) && (!m_pVisited[i]))
+			tq.push(i);
+			m_pVisited[i] = true;
+			visit(i);
+			while (!tq.empty())
 			{
-				m_pVisited[i] = true;
-				visit(i);
-				tq.push(i);
+				ndp = tq.front();
+				tq.pop();
+				for (nodepos j = 0; j < m_nMax; j++)
+				{
+					if ((M_INFINITY != m_pAdcy_mtx[ndp][j]) && (!m_pVisited[j]))
+					{
+						m_pVisited[j] = true;
+						visit(j);
+						tq.push(j);
+					}
+				}
 			}
 		}
 	}

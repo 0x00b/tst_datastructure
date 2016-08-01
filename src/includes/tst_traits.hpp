@@ -7,12 +7,12 @@ struct TstIteratorTraits
 	typedef typename T::value_type value_type;
 };
 
-
+/*
 template<typename T>
 struct TstIteratorTraits<T*>
 {
 	typedef typename T::value_type value_type;
-};
+};*/
 
 
 template<typename TstIter>
