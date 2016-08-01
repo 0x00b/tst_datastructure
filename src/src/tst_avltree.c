@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
+#include <string.h>
 
 extern
 void dspavltree(tst_rbtnode* root, tst_rbtnode* sentinel);
