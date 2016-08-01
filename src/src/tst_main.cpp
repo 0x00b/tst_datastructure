@@ -16,7 +16,9 @@
 	#define _CRTDBG_MAP_ALLOC
 	#include <windows.h>
 	#include <crtdbg.h>
+	#include <time.h>
 #else
+	#include <sys/time.h>
 
 #endif
 

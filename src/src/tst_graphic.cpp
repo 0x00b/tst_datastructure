@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
 #include "tst_queue.hpp"
 
 TstGraphicMtx::TstGraphicMtx() :
