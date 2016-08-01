@@ -1,4 +1,4 @@
-# tst_rbtree
+# tst_datastructure
 Using C to achieve the rbtree,and some stl(like list,stack ,queue)
 效果
 ![](/pics/rb-tree_insert_delete.png)
