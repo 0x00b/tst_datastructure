@@ -53,10 +53,10 @@
     <ClCompile Include="src\src\tst_main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\src\tst_rbtree.c">
+    <ClCompile Include="src\src\tst_tree.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\src\tst_tree.cpp">
+    <ClCompile Include="src\src\tst_rbtree.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

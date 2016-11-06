@@ -20,17 +20,14 @@ TstGraphicMtx::~TstGraphicMtx()
 {
 	delete[] m_pVisited;
 	delete[] m_pVertex;
-	m_pVertex = NULL;
 	if (NULL != m_pAdcy_mtx)
 	{
 		for (nodepos i = 0; i < m_nMax; i++)
 		{
 			delete[] m_pAdcy_mtx[i];
-			m_pAdcy_mtx[i] = NULL;
 
 		}
 		delete[] m_pAdcy_mtx;
-		m_pAdcy_mtx = NULL;
 	}
 }
 
@@ -200,4 +197,15 @@ void TstGraphicMtx::DispGraphic()
 		std::cout<<std::endl;
 	}
 
+}
+
+
+/*********************  TstGraphicLink  ***********************/
+
+TstGraphicLink::TstGraphicLink()
+{
+}
+
+TstGraphicLink::~TstGraphicLink()
+{
 }

@@ -31,6 +31,7 @@ using namespace std;
 #define len 12
 
 int Now();
+void tst_stack_main();
 void tst_avl_main();
 void tst_rbt_main();
 void tst_ghc_main();
@@ -38,8 +39,10 @@ void tst_leak_main();
 
 int main(int argc, char* args[])
 {
-#if 0
-	tst_avl_main();
+#if 1
+	tst_stack_main();
+#elif 0
+	tst_rbt_main();
 #elif 0
 	tst_rbt_main();
 #elif 1
@@ -99,7 +102,7 @@ void tst_leak_main()
 	TstList<LeakTest> otll; TstList<LeakTest>::iterator oit;
 	
 	int str = Now();
-	for (size_t i = 0; i < 10000; i++)
+	for (size_t i = 0; i < 10000; ++i)
 	{
 		LeakTest olt(i);
 		otll.insert(otll.begin(), olt);
@@ -140,6 +143,176 @@ void tst_leak_main()
 	delete pn;
 
 }
+
+///////////////////////////////////
+/*
+ * 把公式字符串拆分成单个元素，放在队列中
+ */
+bool split_formula(char* str, TstList<string>& lst)
+{
+	assert(str != NULL);
+
+	string temp("");
+
+	while (*str != 0)
+	{
+		if (*str == '+' || *str == '-' || *str == '*' || *str == '/' || *str == '(' || *str == ')' )
+		{
+			temp = *str++;
+			lst.push_back(temp);
+		}
+		else if ('0' <= *str && *str <= '9')
+		{
+			while (*str != 0 && '0' <= *str && *str <= '9')
+			{
+				temp += *str++;
+			}
+			lst.push_back(temp);
+		}
+		else if (*str == ' ')
+		{
+			str++;
+		}
+		else
+		{
+			return false;
+		}
+		temp.clear();
+	}
+	return true;
+}
+
+/*
+ * 判断串是数字
+ */
+bool is_number(string& str)
+{
+	if (!str.empty())
+	{
+		for (string::iterator it = str.begin(); it != str.end(); ++it)
+		{
+			if ((*it) < '0' || (*it) > '9')
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
+/*
+ * 判断一个表达式是正确的，例如：3*（23+2）是正确的，但是3（23+2）是错误的。
+ */
+bool is_right_formula(TstList<string>& lst)
+{
+	return true;
+}
+/* 
+ * 中缀表达式转后缀表达式
+ * 
+ * 1、数字直接输出到后序表达式队列。
+ * 2、遇到 "+","-" ，则先弹出符号栈中的元素，弹出一个元素则需要把这个元素放进后序表达式队列，出栈时遇到 "(" 或者栈空为止，然后把当前的符号放进符号栈。
+ * 3、遇到 "*","/","("，则直接压进符号栈。
+ * 4、遇到 ")"， 则需要弹出符号栈中的元素，直到找到与之对应的前面的"("为止。
+ * 5、当中序表达式队列中没有元素时，一次弹出符号栈中的元素，同时放进后续表达式队列中。
+ */
+bool mid_to_aft(TstList<string>& lst_mid_formula, TstList<string>& lst_aft_formula)
+{
+	TstStack<string> stk_formula;
+
+	if (!is_right_formula(lst_mid_formula))
+	{
+		return false;
+	}
+	for (TstList<string>::iterator it = lst_mid_formula.begin(); it != lst_mid_formula.end(); ++it)
+	{
+		string& str = *it;
+
+		if (is_number(str))
+		{
+			lst_aft_formula.push_back(str);
+		}
+		else if ('+' == str[0] || '-' == str[0])
+		{
+			while (!stk_formula.empty())
+			{
+				string& str_top = stk_formula.top();
+				if (str_top[0] != '(')
+				{
+					lst_aft_formula.push_back(str_top);
+					stk_formula.pop();
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			stk_formula.push(str);
+		}
+		else if ('*' == str[0] || '/' == str[0])
+		{
+			stk_formula.push(str);
+		}
+		else if ('(' == str[0])
+		{
+			stk_formula.push(str);
+		}
+		else if (')' == str[0])
+		{
+			string str_top("");
+			while ((str_top = stk_formula.top())[0] != '(')
+			{
+				stk_formula.pop();
+				lst_aft_formula.push_back(str_top);
+			}
+			stk_formula.pop();
+		}
+	}
+	while (!stk_formula.empty())
+	{
+		lst_aft_formula.push_back(stk_formula.top());
+		stk_formula.pop();
+	}
+	return true;
+}
+/*
+ * 栈的应用，中缀表达式，后缀表达式
+ *
+ */
+void tst_stack_main() 
+{
+	char str_formula[100];
+	TstList<string> lst_mid_formula; /* 中缀表达式*/
+	TstList<string> lst_aft_formula; /* 后缀表达式*/
+	cout << "input math formula:" << endl;
+	cin>>str_formula;
+
+	/* 拆分出表达式的各元素，按照原来的顺序放在队列中 */
+	bool bret = split_formula(str_formula, lst_mid_formula);
+	if (bret)
+	{
+		cout << "中缀表达式：";
+		for (TstList<string>::iterator it = lst_mid_formula.begin(); it != lst_mid_formula.end(); ++it)
+		{
+			string& str = *it;
+			cout << str.c_str() << " ";
+		}
+		/* 调用函数*/
+		/* 转化为后缀表达式 ，事实上，通过中缀和后缀表达式可以还原二叉树*/
+		mid_to_aft(lst_mid_formula, lst_aft_formula);
+
+		cout << "\n后缀表达式：";
+		for (TstList<string>::iterator it = lst_aft_formula.begin(); it != lst_aft_formula.end(); ++it)
+		{
+			cout << (*it).c_str() << " ";
+		}
+		cout << endl;
+	}
+}
+
+
 void tst_avl_main()
 {
 	tst_avlnode* root = NULL;
