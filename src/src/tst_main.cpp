@@ -10,6 +10,7 @@
 #include "tst_list.hpp"
 #include "tst_stack.hpp"
 #include "tst_graphic.hpp"
+#include "tst_stack_app.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 	#define _WIN
@@ -144,139 +145,6 @@ void tst_leak_main()
 
 }
 
-///////////////////////////////////
-/*
- * 把公式字符串拆分成单个元素，放在队列中
- */
-bool split_formula(char* str, TstList<string>& lst)
-{
-	assert(str != NULL);
-
-	string temp("");
-
-	while (*str != 0)
-	{
-		if (*str == '+' || *str == '-' || *str == '*' || *str == '/' || *str == '(' || *str == ')' )
-		{
-			temp = *str++;
-			lst.push_back(temp);
-		}
-		else if ('0' <= *str && *str <= '9')
-		{
-			while (*str != 0 && '0' <= *str && *str <= '9')
-			{
-				temp += *str++;
-			}
-			lst.push_back(temp);
-		}
-		else if (*str == ' ')
-		{
-			str++;
-		}
-		else
-		{
-			return false;
-		}
-		temp.clear();
-	}
-	return true;
-}
-
-/*
- * 判断串是数字
- */
-bool is_number(string& str)
-{
-	if (!str.empty())
-	{
-		for (string::iterator it = str.begin(); it != str.end(); ++it)
-		{
-			if ((*it) < '0' || (*it) > '9')
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-	return false;
-}
-
-/*
- * 判断一个表达式是正确的，例如：3*（23+2）是正确的，但是3（23+2）是错误的。
- */
-bool is_right_formula(TstList<string>& lst)
-{
-	return true;
-}
-/* 
- * 中缀表达式转后缀表达式
- * 
- * 1、数字直接输出到后序表达式队列。
- * 2、遇到 "+","-" ，则先弹出符号栈中的元素，弹出一个元素则需要把这个元素放进后序表达式队列，出栈时遇到 "(" 或者栈空为止，然后把当前的符号放进符号栈。
- * 3、遇到 "*","/","("，则直接压进符号栈。
- * 4、遇到 ")"， 则需要弹出符号栈中的元素，直到找到与之对应的前面的"("为止。
- * 5、当中序表达式队列中没有元素时，一次弹出符号栈中的元素，同时放进后续表达式队列中。
- */
-bool mid_to_aft(TstList<string>& lst_mid_formula, TstList<string>& lst_aft_formula)
-{
-	TstStack<string> stk_formula;
-
-	if (!is_right_formula(lst_mid_formula))
-	{
-		return false;
-	}
-	for (TstList<string>::iterator it = lst_mid_formula.begin(); it != lst_mid_formula.end(); ++it)
-	{
-		string& str = *it;
-
-		if (is_number(str))
-		{
-			lst_aft_formula.push_back(str);
-		}
-		else if ('+' == str[0] || '-' == str[0])
-		{
-			while (!stk_formula.empty())
-			{
-				string& str_top = stk_formula.top();
-				if (str_top[0] != '(')
-				{
-					lst_aft_formula.push_back(str_top);
-					stk_formula.pop();
-				}
-				else
-				{
-					break;
-				}
-			}
-
-			stk_formula.push(str);
-		}
-		else if ('*' == str[0] || '/' == str[0])
-		{
-			stk_formula.push(str);
-		}
-		else if ('(' == str[0])
-		{
-			stk_formula.push(str);
-		}
-		else if (')' == str[0])
-		{
-			string str_top("");
-			while ((str_top = stk_formula.top())[0] != '(')
-			{
-				stk_formula.pop();
-				lst_aft_formula.push_back(str_top);
-			}
-			stk_formula.pop();
-		}
-	}
-	while (!stk_formula.empty())
-	{
-		lst_aft_formula.push_back(stk_formula.top());
-		stk_formula.pop();
-	}
-	return true;
-}
 /*
  * 栈的应用，中缀表达式，后缀表达式
  *
@@ -309,6 +177,8 @@ void tst_stack_main()
 			cout << (*it).c_str() << " ";
 		}
 		cout << endl;
+
+		printf( "\n表达式结果：%.10lf\n" ,calculate(lst_aft_formula));
 	}
 }
 

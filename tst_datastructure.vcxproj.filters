@@ -42,6 +42,9 @@
     <ClInclude Include="src\includes\tst_tree.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\includes\tst_stack_app.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\src\tst_avltree.c">
@@ -57,6 +60,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\src\tst_rbtree.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\src\tst_stack_app.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
