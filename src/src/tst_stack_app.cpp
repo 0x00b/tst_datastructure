@@ -232,3 +232,60 @@ double calculate(TstList<std::string>& lst_aft_formula)
 	}
 	return t_stk.top();
 }
+
+/*--------------------------- ¿®∫≈∆•≈‰ -----------------------------*/
+
+bool match_bracket(char* str)
+{
+	TstStack<char> c_stk;
+	bool res = true;
+	while (*str != 0)
+	{
+		if (*str == '(' || *str == '[' || *str == '{'  )
+		{
+			c_stk.push(*str);
+		}
+		else
+		{
+			switch (*str)
+			{
+				case ')':
+				{
+					if (c_stk.top() != '(')
+					{
+						res = false;
+					}
+				}break;
+
+				case ']':
+				{
+					if (c_stk.top() != '[')
+					{
+						res = false;
+					}
+				}break;
+
+				case '}':
+				{
+					if (c_stk.top() != '{')
+					{
+						res = false;
+					}
+				}break;
+
+				default:
+				{
+					res = false; 
+					break;
+				}
+			}
+			if (!res)
+			{
+				break;
+			}
+			c_stk.pop();
+		}
+		str++;
+	}
+	return res;
+}

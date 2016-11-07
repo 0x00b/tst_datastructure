@@ -151,14 +151,17 @@ void tst_leak_main()
  */
 void tst_stack_main() 
 {
-	char str_formula[100];
+	char str[100]; 
+	bool bret = false;
+
+#if 0
 	TstList<string> lst_mid_formula; /* 中缀表达式*/
 	TstList<string> lst_aft_formula; /* 后缀表达式*/
 	cout << "input math formula:" << endl;
-	cin>>str_formula;
+	cin>> str;
 
 	/* 拆分出表达式的各元素，按照原来的顺序放在队列中 */
-	bool bret = split_formula(str_formula, lst_mid_formula);
+	bret = split_formula(str, lst_mid_formula);
 	if (bret)
 	{
 		cout << "中缀表达式：";
@@ -180,6 +183,12 @@ void tst_stack_main()
 
 		printf( "\n表达式结果：%.10lf\n" ,calculate(lst_aft_formula));
 	}
+#elif 1
+	cout << "\ninput some bracket(eg:[()][{()}]):";
+	cin >> str;
+	bret = match_bracket(str);
+	cout << (bret ? "括号匹配" : "括号不匹配")<<endl;
+#endif
 }
 
 

@@ -17,6 +17,7 @@ double calculate(TstList<std::string>& lst_aft_formula);
 /*
  * ¿®∫≈∆•≈‰
  */
+bool match_bracket(char* str);
 
 /*
  * √‘π¨«ÛΩ‚
@@ -29,4 +30,6 @@ double calculate(TstList<std::string>& lst_aft_formula);
 /*
  * ––±‡º≠
  */
+
+
 #endif
