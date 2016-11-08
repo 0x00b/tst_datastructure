@@ -19,17 +19,32 @@ double calculate(TstList<std::string>& lst_aft_formula);
  */
 bool match_bracket(char* str);
 
+typedef struct Point_
+{
+	int x;
+	int y;
+	Point_(int x_, int y_) { x = x_; y = y_; }
+}Point;
+
+typedef struct Maze_
+{	
+	const static int n = 10;
+	int mz[n][n];
+}Maze;
+
 /*
  * 迷宫求解
  */
+bool maze_out(Maze& mz, int n, Point& start, TstStack<Point>& trail);
 
 /*
  * 数制转换
  */
+void num_conversion(int num, int cv, TstStack<char>& stk);
 
 /*
  * 行编辑
  */
-
+void edit_row();
 
 #endif

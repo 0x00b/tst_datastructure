@@ -183,11 +183,88 @@ void tst_stack_main()
 
 		printf( "\n表达式结果：%.10lf\n" ,calculate(lst_aft_formula));
 	}
-#elif 1
-	cout << "\ninput some bracket(eg:[()][{()}]):";
+#elif 0
+	cout << "括号匹配：" << endl;
+	cout << "input some bracket(eg:[()][{()}]):";
 	cin >> str;
 	bret = match_bracket(str);
-	cout << (bret ? "括号匹配" : "括号不匹配")<<endl;
+	cout << (bret ? "括号匹配" : "括号不匹配") << endl;
+#elif 1
+	edit_row();
+
+#elif 1
+	cout << "迷宫求解：" << endl;
+	TstStack<Point> trail;
+	Maze maze{/* 2是出入口*/
+	{	//0,1,2,3,4,5,6,7,8,9
+		{ 0,2,0,0,0,0,0,2,0,0 },//0
+		{ 0,1,0,0,1,1,1,1,0,0 },//1
+		{ 0,1,1,1,0,0,0,0,1,0 },//2
+		{ 0,0,0,1,0,1,1,1,0,0 },//3
+		{ 0,1,1,1,1,1,0,1,0,0 },//4
+		{ 0,1,0,0,0,1,0,1,0,0 },//5
+		{ 0,1,1,1,0,1,0,1,0,0 },//6
+		{ 0,0,0,0,0,0,0,1,0,0 },//7
+		{ 0,0,0,1,1,1,1,1,1,0 },//8
+		{ 0,0,0,0,2,0,0,0,0,0 }	//9
+	} };
+	bret = maze_out(maze, maze.n, Point(0, 1), trail);
+	for (int i = 0; i < maze.n; i++)
+	{
+		for (int j = 0; j < maze.n; j++)
+		{
+			cout << maze.mz[i][j]<<" ";
+		}
+		cout << endl;
+	}
+	if (bret)
+	{
+		cout << "路径如下：" << endl;
+		while (!trail.empty())
+		{
+			Point& p = trail.top();
+			cout << "<--(" << p.x << "," << p.y << ")";
+			trail.pop();
+		}
+		cout << endl;
+	}
+	else
+	{
+		cout << "没有通路！" << endl;
+	}
+
+
+#elif 0
+	cout << "进制转换：" << endl;
+	TstStack<char> ch_stk;
+	int num = 0;
+	cout << "input a number:";
+	cin >> num;
+	num_conversion(num, 2, ch_stk);
+	cout << "\n二进制：";
+	while (!ch_stk.empty())
+	{
+		cout << ch_stk.top();
+		ch_stk.pop();
+	}
+	cout << endl;
+	num_conversion(num, 8, ch_stk);
+	cout << "\n八进制：";
+	while (!ch_stk.empty())
+	{
+		cout << ch_stk.top();
+		ch_stk.pop();
+	}
+	cout << endl;
+	num_conversion(num, 16, ch_stk);
+	cout << "\n十六进制：0x";
+	while (!ch_stk.empty())
+	{
+		cout << ch_stk.top();
+		ch_stk.pop();
+	}
+	cout << endl;
+
 #endif
 }
 

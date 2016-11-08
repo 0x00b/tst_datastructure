@@ -1,6 +1,8 @@
 #include "tst_stack_app.h"
 
 #include <assert.h>
+#include <conio.h>
+
 
 ///////////////////////////////////
 /*
@@ -288,4 +290,114 @@ bool match_bracket(char* str)
 		str++;
 	}
 	return res;
+}
+
+/*--------------------------- 迷宫求解 -----------------------------*/
+bool maze_out(Maze& mz, int n,Point& start, TstStack<Point>& trail)
+{
+	int dir[][2] = 
+	{
+		{  0,-1 },//left
+		{ -1, 0 },//up
+		{  1, 0 },//right
+		{  0, 1 },//down
+	};
+
+	trail.push(start);
+	int x, y;
+	int i = 0;
+	while (!trail.empty())
+	{
+		Point pt = trail.top();
+		mz.mz[pt.x][pt.y] = 8;
+
+		for (i = 0; i < 4; i++)/* 根据dir指向的方向寻找下一个可行 */
+		{
+			Point p = pt;
+			p.x += dir[i][0];
+			p.y += dir[i][1];
+			if ((0 <= p.x && p.x < n) && (0 <= p.y && p.y < n))/* 坐标合法，坐标不越界 */
+			{
+				if (mz.mz[p.x][p.y] == 1)/* 可行的位置 */
+				{
+					trail.push(p);
+					break;
+				}
+				else if (mz.mz[p.x][p.y] == 2)/* 出口 */
+				{
+					mz.mz[p.x][p.y] = 8;
+					trail.push(p);
+					return true;
+				}
+			}
+		}
+		if (i >= 4)/* 没有找到可行的下一个位置 */
+		{
+			trail.pop();
+		}
+	} 
+	return false;
+}
+
+/*--------------------------- 行编辑 -----------------------------*/
+void edit_row()
+{
+	/*
+	 * 用list来模拟栈，主要是方便输出，操作的时候都是在队头操作，所以操作是栈模式，所以其实不一定是名字是stack才是栈。
+	 * 只要是用法一样，就是栈，数据结构是思想，不是形式
+	 */
+	TstList<char> chars;
+	char ch;
+	do
+	{
+		std::cout << "input('#'to finish):" << std::endl;
+		for (TstList<char>::iterator i = chars.begin(); i != chars.end(); ++i)
+		{
+			std::cout << *i;
+		}
+		ch = getch();
+
+#if defined(_WIN32) || defined(_WIN64)
+		system("cls");
+#endif // _WIN
+
+		switch (ch)
+		{
+			case 8://del
+			{
+				if (!chars.empty())
+				{
+					chars.pop_front();
+				}
+			}break;
+
+			case '@'://clear
+			{
+				chars.clear();
+			}break;
+
+			default:
+				chars.push_front(ch);;
+		}
+	} while (ch != '#');//end input
+}
+
+/*--------------------------- 进制转换 -----------------------------*/
+void num_conversion(int num, int cv, TstStack<char>& stk)
+{
+	char ch = 0;
+	while (num != 0)
+	{
+		ch = num%cv;
+		if (0 <= ch && ch <= 9)
+		{
+			ch += '0';
+		}
+		else
+		{
+			ch = ch - 10 + 'A';
+		}
+		stk.push(ch);
+		num /= cv;
+	}
 }
