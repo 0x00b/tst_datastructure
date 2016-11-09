@@ -23,3 +23,8 @@ Using C to achieve the rbtree,and some stl(like list,stack ,queue)
 #效果
 ![](/pics/stack_app2.png)
 
+#20161109
+字符串匹配，KMP
+#效果
+![](/pics/KMP.png)
+

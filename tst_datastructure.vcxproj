@@ -123,6 +123,7 @@
     <ClInclude Include="src\includes\tst_rbtree.h" />
     <ClInclude Include="src\includes\tst_stack.hpp" />
     <ClInclude Include="src\includes\tst_stack_app.h" />
+    <ClInclude Include="src\includes\tst_string_match.h" />
     <ClInclude Include="src\includes\tst_traits.hpp" />
     <ClInclude Include="src\includes\tst_tree.hpp" />
   </ItemGroup>
@@ -132,6 +133,7 @@
     <ClCompile Include="src\src\tst_main.cpp" />
     <ClCompile Include="src\src\tst_rbtree.c" />
     <ClCompile Include="src\src\tst_stack_app.cpp" />
+    <ClCompile Include="src\src\tst_string_match.cpp" />
     <ClCompile Include="src\src\tst_tree.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

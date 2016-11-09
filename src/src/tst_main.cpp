@@ -11,6 +11,7 @@
 #include "tst_stack.hpp"
 #include "tst_graphic.hpp"
 #include "tst_stack_app.h"
+#include "tst_string_match.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 	#define _WIN
@@ -33,6 +34,7 @@ using namespace std;
 
 int Now();
 void tst_stack_main();
+void tst_string_match_main();
 void tst_avl_main();
 void tst_rbt_main();
 void tst_ghc_main();
@@ -41,13 +43,15 @@ void tst_leak_main();
 int main(int argc, char* args[])
 {
 #if 1
+	tst_string_match_main();
+#elif 0
 	tst_stack_main();
 #elif 0
 	tst_rbt_main();
 #elif 0
 	tst_rbt_main();
 #elif 1
-	tst_ghc_main();
+	tst_ghc_main(); 
 
 #endif
 
@@ -144,7 +148,38 @@ void tst_leak_main()
 	delete pn;
 
 }
-
+/*
+* 字符串匹配
+*
+*/
+void tst_string_match_main()
+{
+	char str[100];
+	char obj[100];
+	cout << "输入主串和目标子串:";
+	cin >> str;
+	cin >> obj;
+	int pos = Index(str, obj);
+	cout << "暴力美学：" << endl;
+	if (pos == -1)
+	{
+		cout << "没有匹配到目标子串！" << endl;
+	}
+	else
+	{
+		cout << "暴力破解，子串在主串的起始位置为：" << pos << endl;
+	}
+	cout << "KMP：" << endl;
+	pos = KMP(str, obj);
+	if (pos == -1)
+	{
+		cout << "没有匹配到目标子串！" << endl;
+	}
+	else
+	{
+		cout << "KMP看了一眼后，发现子串在主串的起始位置为：" << pos << endl;
+	}
+}
 /*
  * 栈的应用，中缀表达式，后缀表达式
  *
@@ -154,7 +189,7 @@ void tst_stack_main()
 	char str[100]; 
 	bool bret = false;
 
-#if 0
+#if 1
 	TstList<string> lst_mid_formula; /* 中缀表达式*/
 	TstList<string> lst_aft_formula; /* 后缀表达式*/
 	cout << "input math formula:" << endl;
